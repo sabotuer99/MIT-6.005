@@ -1,4 +1,4 @@
-package mit.psets.ps3.src.library;
+package library;
 
 import java.util.List;
 import java.util.Set;

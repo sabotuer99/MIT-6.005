@@ -1,4 +1,4 @@
-package mit.psets.ps3.src.library;
+package library;
 
 /**
  * BookCopy is a mutable type representing a particular copy of a book that is held in a library's

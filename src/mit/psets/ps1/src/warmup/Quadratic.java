@@ -1,4 +1,4 @@
-package mit.psets.ps1.src.warmup;
+package warmup;
 
 import java.util.Set;
 

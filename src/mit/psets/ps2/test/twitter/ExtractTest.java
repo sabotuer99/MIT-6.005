@@ -1,4 +1,4 @@
-package mit.psets.ps2.test.twitter;
+package twitter;
 
 import static org.junit.Assert.*;
 
@@ -7,10 +7,6 @@ import java.util.Arrays;
 import java.util.Set;
 
 import org.junit.Test;
-
-import mit.psets.ps2.src.twitter.Extract;
-import mit.psets.ps2.src.twitter.Timespan;
-import mit.psets.ps2.src.twitter.Tweet;
 
 public class ExtractTest {
 

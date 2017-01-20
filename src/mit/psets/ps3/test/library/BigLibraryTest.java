@@ -1,13 +1,10 @@
-package mit.psets.ps3.test.library;
-
-import static org.junit.Assert.assertEquals;
-
-import java.util.Collections;
+package library;
 
 import org.junit.Test;
+import static org.junit.Assert.*;
 
-import mit.psets.ps3.src.library.BigLibrary;
-import mit.psets.ps3.src.library.Library;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Test suite for BigLibrary's stronger specs.

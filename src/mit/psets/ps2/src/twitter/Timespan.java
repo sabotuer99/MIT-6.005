@@ -1,4 +1,4 @@
-package mit.psets.ps2.src.twitter;
+package twitter;
 
 import java.time.Instant;
 
