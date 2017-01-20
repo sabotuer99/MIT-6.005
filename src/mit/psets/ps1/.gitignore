@@ -1,2 +1,5 @@
 /my-submission.zip
 /my-grader-report.xml
+/bin/
+.grader
+log.txt
