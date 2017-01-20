@@ -53,7 +53,7 @@ public class Quadratic {
 
 		double root1 = 0;
 		double root2 = 0;
-		if(al > 0){
+		if(al != 0){
 			root1 = (-b + Math.sqrt(term)) / (2 * a);
 			root2 = (-b - Math.sqrt(term)) / (2 * a);
 		} else {
