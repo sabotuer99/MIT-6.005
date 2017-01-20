@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="1" hostname="E077TWHORTEN-7L" name="warmup.QuadraticTest" skipped="0" tests="8" time="0.057" timestamp="2017-01-20T21:24:04">
+<testsuite errors="0" failures="1" hostname="E077TWHORTEN-7L" name="warmup.staff.QuadraticTest" skipped="0" tests="3" time="0.055" timestamp="2017-01-20T21:24:04">
   <properties>
     <property name="java.vendor" value="Oracle Corporation" />
     <property name="sun.java.launcher" value="SUN_STANDARD" />
@@ -52,14 +52,14 @@
     <property name="java.vm.vendor" value="Oracle Corporation" />
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
     <property name="beta.grader.jar" value="ps1-beta-grader.jar" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner warmup.QuadraticTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Projects\MIT 6.005\src\mit\psets\ps1\.grader\TEST-warmup.QuadraticTest.xml crashfile=C:\Projects\MIT 6.005\src\mit\psets\ps1\.grader\junitvmwatcher7786671730634951154.properties propsfile=C:\Projects\MIT 6.005\src\mit\psets\ps1\.grader\junit2732838748992307883.properties" />
-    <property name="java.class.path" value="C:\Projects\MIT 6.005\src\mit\psets\ps1\lib\junit-4.12.jar;C:\Projects\MIT 6.005\src\mit\psets\ps1\lib\hamcrest-core-1.3.jar;C:\Projects\MIT 6.005\src\mit\psets\ps1\.grader\bin-student;C:\Projects\MIT 6.005\src\mit\psets\ps1;C:\Users\twhorten\skeleton\lib\algs4-package.jar;C:\Users\twhorten\skeleton\lib\algs4.jar;C:\Users\twhorten\skeleton\lib\checkstyle-5.9-all.jar;C:\Users\twhorten\skeleton\lib\gjdb.jar;C:\Users\twhorten\skeleton\lib\hamcrest-core-1.3.jar;C:\Users\twhorten\skeleton\lib\jh61b.jar;C:\Users\twhorten\skeleton\lib\junit-4.12.jar;C:\Users\twhorten\skeleton\lib\StaffGitlet_obf.jar;C:\Users\twhorten\skeleton\lib\staffp0_obf.jar;C:\Users\twhorten\skeleton\lib\stdlib-package.jar;C:\Users\twhorten\skeleton\lib\stdlib.jar;C:\Users\twhorten\skeleton\lib\xchart-2.4.3.jar;C:\Users\twhorten\.p2\pool\plugins\org.apache.ant_1.9.6.v201510161327\lib\ant-launcher.jar;C:\Users\twhorten\.p2\pool\plugins\org.apache.ant_1.9.6.v201510161327\lib\ant.jar;C:\Users\twhorten\.p2\pool\plugins\org.apache.ant_1.9.6.v201510161327\lib\ant-junit.jar;C:\Users\twhorten\.p2\pool\plugins\org.apache.ant_1.9.6.v201510161327\lib\ant-junit4.jar" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner warmup.staff.QuadraticTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Projects\MIT 6.005\src\mit\psets\ps1\.grader\TEST-warmup.staff.QuadraticTest.xml crashfile=C:\Projects\MIT 6.005\src\mit\psets\ps1\.grader\junitvmwatcher8436871905513064607.properties propsfile=C:\Projects\MIT 6.005\src\mit\psets\ps1\.grader\junit7476460413766228359.properties" />
+    <property name="java.class.path" value="C:\Projects\MIT 6.005\src\mit\psets\ps1\lib\junit-4.12.jar;C:\Projects\MIT 6.005\src\mit\psets\ps1\lib\hamcrest-core-1.3.jar;C:\Projects\MIT 6.005\src\mit\psets\ps1\.grader\bin-tests-final;C:\Projects\MIT 6.005\src\mit\psets\ps1\.grader\bin-student;C:\Projects\MIT 6.005\src\mit\psets\ps1;C:\Users\twhorten\skeleton\lib\algs4-package.jar;C:\Users\twhorten\skeleton\lib\algs4.jar;C:\Users\twhorten\skeleton\lib\checkstyle-5.9-all.jar;C:\Users\twhorten\skeleton\lib\gjdb.jar;C:\Users\twhorten\skeleton\lib\hamcrest-core-1.3.jar;C:\Users\twhorten\skeleton\lib\jh61b.jar;C:\Users\twhorten\skeleton\lib\junit-4.12.jar;C:\Users\twhorten\skeleton\lib\StaffGitlet_obf.jar;C:\Users\twhorten\skeleton\lib\staffp0_obf.jar;C:\Users\twhorten\skeleton\lib\stdlib-package.jar;C:\Users\twhorten\skeleton\lib\stdlib.jar;C:\Users\twhorten\skeleton\lib\xchart-2.4.3.jar;C:\Users\twhorten\.p2\pool\plugins\org.apache.ant_1.9.6.v201510161327\lib\ant-launcher.jar;C:\Users\twhorten\.p2\pool\plugins\org.apache.ant_1.9.6.v201510161327\lib\ant.jar;C:\Users\twhorten\.p2\pool\plugins\org.apache.ant_1.9.6.v201510161327\lib\ant-junit.jar;C:\Users\twhorten\.p2\pool\plugins\org.apache.ant_1.9.6.v201510161327\lib\ant-junit4.jar" />
     <property name="ant.version" value="Apache Ant(TM) version 1.9.6 compiled on June 29 2015" />
     <property name="project.name" value="ps1-warmup" />
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
     <property name="java.vm.specification.version" value="1.8" />
     <property name="sun.cpu.endian" value="little" />
-    <property name="didit.desc" value="Running the tests we gave you with the problem set on your implementation." />
+    <property name="didit.desc" value="Running our tests against your implementation" />
     <property name="sun.os.patch.level" value="Service Pack 1" />
     <property name="eclipse.pdebuild.home" value="/C:/Users/twhorten/eclipse/jee-neon/eclipse/../../../.p2/pool/plugins/org.eclipse.pde.build_3.9.200.v20160204-0642/./" />
     <property name="java.io.tmpdir" value="C:\Users\twhorten\AppData\Local\Temp\" />
@@ -80,16 +80,11 @@
     <property name="grader.dir" value=".grader" />
     <property name="ant.project.invoked-targets" value="all" />
   </properties>
-  <testcase classname="warmup.QuadraticTest" name="testOneRoot" time="0.001" />
-  <testcase classname="warmup.QuadraticTest" name="testAssertionsEnabled" time="0.0" />
-  <testcase classname="warmup.QuadraticTest" name="testOneZeroRoot" time="0.0" />
-  <testcase classname="warmup.QuadraticTest" name="testPositiveRoots" time="0.0" />
-  <testcase classname="warmup.QuadraticTest" name="testBothZeroRoots" time="0.0" />
-  <testcase classname="warmup.QuadraticTest" name="testOppositeSignRoots" time="0.0" />
-  <testcase classname="warmup.QuadraticTest" name="testNegativeRoots" time="0.0" />
-  <testcase classname="warmup.QuadraticTest" name="testLargeRoots" time="0.003">
-    <failure message="expected:&lt;[-45000, 45000]&gt; but was:&lt;[]&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: expected:&lt;[-45000, 45000]&gt; but was:&lt;[]&gt;
-	at warmup.QuadraticTest.testLargeRoots(QuadraticTest.java:79)
+  <testcase classname="warmup.staff.QuadraticTest" name="testRealRoots" time="0.001" />
+  <testcase classname="warmup.staff.QuadraticTest" name="testComplexRoots" time="0.0" />
+  <testcase classname="warmup.staff.QuadraticTest" name="testOneDegenerateRoot" time="0.003">
+    <failure message="expected:&lt;[3]&gt; but was:&lt;[]&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: expected:&lt;[3]&gt; but was:&lt;[]&gt;
+	at warmup.staff.QuadraticTest.testOneDegenerateRoot(QuadraticTest.java:30)
 </failure>
   </testcase>
   <system-out><![CDATA[]]></system-out>

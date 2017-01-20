@@ -1,5 +1,6 @@
 package warmup;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Quadratic {
@@ -12,7 +13,31 @@ public class Quadratic {
      * @return all integers x such that ax^2 + bx + c = 0.
      */
     public static Set<Integer> roots(int a, int b, int c) {
-        throw new RuntimeException("not implemented yet;"); // TODO: delete this line when you implement it
+        Set<Integer> roots = new HashSet<>();
+    	
+        long al = a;
+        long bl = b;
+        long cl = c;
+        
+        
+        System.out.printf("%d %d %d\n", a, b, c);
+
+        long term = bl * bl - 4*al*cl;
+        
+        double root1 = (-b + Math.sqrt(term)) / (2 * a);
+        double root2 = (-b - Math.sqrt(term)) / (2 * a);
+        
+        System.out.println(root1);
+        
+        if(root1 - (int)root1 < 0.000000000001){
+        	roots.add((int)root1);
+        }
+        
+        if(root2 - (int)root2 < 0.000000000001){
+        	roots.add((int)root2);
+        }
+        
+        return roots;
     }
 
     

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src/mit/psets/ps1/src"/>
+	<classpathentry kind="src" path="src/mit/psets/ps2/src"/>
+	<classpathentry kind="src" path="src/mit/psets/ps3/src"/>
+	<classpathentry excluding="mit/psets/ps1/src/warmup/|mit/psets/ps1/test/warmup/|mit/psets/ps1/|mit/psets/ps2/|mit/psets/ps3/|mit/psets/ps1/src/|mit/psets/ps1/src/|mit/psets/ps2/src/|mit/psets/ps2/src/|mit/psets/ps3/src/|mit/psets/ps3/src/|mit/psets/ps1/src/warmup/|mit/psets/ps1/src/|mit/psets/ps2/src/|mit/psets/ps3/src/" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
