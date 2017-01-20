@@ -1,12 +1,18 @@
-package twitter;
+package mit.psets.ps2.test.twitter;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+
+import mit.psets.ps2.src.twitter.Filter;
+import mit.psets.ps2.src.twitter.Timespan;
+import mit.psets.ps2.src.twitter.Tweet;
 
 public class FilterTest {
 

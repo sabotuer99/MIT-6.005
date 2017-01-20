@@ -1,6 +1,6 @@
-package twitter;
+package mit.psets.ps2.test.twitter;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
+
+import mit.psets.ps2.src.twitter.SocialNetwork;
 
 public class SocialNetworkTest {
 

@@ -1,4 +1,4 @@
-package warmup;
+package mit.psets.ps1.test.warmup;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Test;
+
+import mit.psets.ps1.src.warmup.Quadratic;
 
 public class QuadraticTest {
 

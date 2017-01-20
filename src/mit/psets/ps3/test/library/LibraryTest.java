@@ -1,4 +1,4 @@
-package library;
+package mit.psets.ps3.test.library;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,6 +10,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+
+import mit.psets.ps3.src.library.Book;
+import mit.psets.ps3.src.library.Library;
 
 /**
  * Test suite for Library ADT.

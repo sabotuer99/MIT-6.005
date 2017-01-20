@@ -1,9 +1,12 @@
-package library;
+package mit.psets.ps3.test.library;
+
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import mit.psets.ps3.src.library.Book;
 
 /**
  * Test suite for Book ADT.

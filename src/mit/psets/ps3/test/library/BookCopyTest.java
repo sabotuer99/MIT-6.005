@@ -1,9 +1,13 @@
-package library;
+package mit.psets.ps3.test.library;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+
+import org.junit.Test;
+
+import mit.psets.ps3.src.library.Book;
+import mit.psets.ps3.src.library.BookCopy;
 
 /**
  * Test suite for BookCopy ADT.

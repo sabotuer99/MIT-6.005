@@ -1,4 +1,4 @@
-package twitter;
+package mit.psets.ps2.src.twitter;
 
 import java.util.List;
 import java.util.Set;
