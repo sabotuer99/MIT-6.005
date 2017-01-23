@@ -1,1 +1,4 @@
 /bin/
+/.grader/
+my-grader-report.xml
+my-submission.zip

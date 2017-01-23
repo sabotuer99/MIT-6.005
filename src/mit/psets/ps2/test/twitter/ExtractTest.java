@@ -28,6 +28,7 @@ public class ExtractTest {
     private static final Tweet tweet4 = new Tweet(4, "troy", "@MIT rocks till the end of time", d4);
     private static final Tweet tweet5 = new Tweet(5, "troy", "@MIT @mit @berkely @CalTech @blahdeyBlah", d1);
     
+    
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
         assert false; // make sure assertions are enabled with VM argument: -ea
@@ -61,6 +62,29 @@ public class ExtractTest {
      * them in a different class. If you only need them in this test class, then
      * keep them in this test class.
      */
+    
+    @Test
+    public void testGetTimespanEmptySet() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet2, tweet2));
+        
+        assertEquals("expected zero length", 0, timespan.getStart().compareTo(timespan.getEnd()));
+    }
+    
+    @Test
+    public void testGetTimespanMultipleSameTimestamp() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet2, tweet2));
+        
+        assertEquals("expected start", d2, timespan.getStart());
+        assertEquals("expected end", d2, timespan.getEnd());
+    }
+    
+    @Test
+    public void testGetTimespanOrderDoesNotMatter() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet2, tweet1));
+        
+        assertEquals("expected start", d1, timespan.getStart());
+        assertEquals("expected end", d2, timespan.getEnd());
+    }
     
     @Test
     public void testGetTimespanMinTime() {
@@ -106,6 +130,24 @@ public class ExtractTest {
         assertTrue(expected.contains(mentionedUsers.iterator().next().toLowerCase()));
     }
     
+    @Test
+    public void testGetMentionedUsersEmailOmitted() {
+    	final Tweet tweet6 = new Tweet(6, "troy", "email@email.com should not show up", d1);
+    	
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet6));
+        
+        assertTrue("expected empty set", mentionedUsers.isEmpty());
+    }
+    
+    @Test
+    public void testGetMentionedUsersWithPunctuation() {
+    	final Tweet tweet6 = new Tweet(6, "troy", "@mit.  should show up", d1);
+    	
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet6));
+        
+        assertEquals(1, mentionedUsers.size());
+        assertTrue(Pattern.matches("[Mm][Ii][Tt]", mentionedUsers.iterator().next()));
+    }
     /* Copyright (c) 2016 MIT 6.005 course staff, all rights reserved.
      * Redistribution of original or derived work requires explicit permission.
      * Don't post any of this code on the web or to a public Github repository.

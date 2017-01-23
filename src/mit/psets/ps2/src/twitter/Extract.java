@@ -28,12 +28,18 @@ public class Extract {
         Instant min = Instant.MAX;
         Instant max = Instant.MIN;
         
+        Timespan minspan = new Timespan(min,min);
+        
+        if(tweets == null || tweets.size() == 0){
+        	return minspan;
+        }
+        
         for(Tweet tweet : tweets){
         	min = min.compareTo(tweet.getTimestamp()) > 0 ? tweet.getTimestamp() : min ;
         	max = max.compareTo(tweet.getTimestamp()) < 0 ? tweet.getTimestamp() : max ;
         }
         
-        Timespan minspan = new Timespan(min, max);
+        minspan = new Timespan(min, max);
         return minspan;
     }
 
@@ -61,7 +67,7 @@ public class Extract {
          *         are equivalent.
          */
     	
-    	String regex = "(?!<[^A-Za-z0-9_-])@[A-Za-z0-9_-]+(?!>[^A-Za-z0-9_-])";
+    	String regex = "(?<![A-Za-z0-9_-])@[A-Za-z0-9_-]+(?![A-Za-z0-9_-])";
     	Pattern p = Pattern.compile(regex);
     	Set<String> usernames = new HashSet<>();
     	for(Tweet tweet : tweets){
