@@ -1,7 +1,11 @@
 package twitter;
 
+import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Extract consists of methods that extract information from a list of tweets.
@@ -21,7 +25,16 @@ public class Extract {
      *         every tweet in the list.
      */
     public static Timespan getTimespan(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        Instant min = Instant.MAX;
+        Instant max = Instant.MIN;
+        
+        for(Tweet tweet : tweets){
+        	min = min.compareTo(tweet.getTimestamp()) > 0 ? tweet.getTimestamp() : min ;
+        	max = max.compareTo(tweet.getTimestamp()) < 0 ? tweet.getTimestamp() : max ;
+        }
+        
+        Timespan minspan = new Timespan(min, max);
+        return minspan;
     }
 
     /**
@@ -40,7 +53,25 @@ public class Extract {
      *         include a username at most once.
      */
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        /* Tweet.getAuthor() spec...
+         * @return Twitter username who wrote this tweet.
+         *         A Twitter username is a nonempty sequence of letters (A-Z or
+         *         a-z), digits, underscore ("_"), or hyphen ("-").
+         *         Twitter usernames are case-insensitive, so "jbieber" and "JBieBer"
+         *         are equivalent.
+         */
+    	
+    	String regex = "(?!<[^A-Za-z0-9_-])@[A-Za-z0-9_-]+(?!>[^A-Za-z0-9_-])";
+    	Pattern p = Pattern.compile(regex);
+    	Set<String> usernames = new HashSet<>();
+    	for(Tweet tweet : tweets){
+    		Matcher m = p.matcher(tweet.getText());
+    		while(m.find()){
+    			usernames.add(m.group().toLowerCase().substring(1));
+    		}
+    	}
+    	
+    	return usernames;
     }
 
     /* Copyright (c) 2007-2016 MIT 6.005 course staff, all rights reserved.

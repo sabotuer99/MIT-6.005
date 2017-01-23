@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 
@@ -17,9 +19,14 @@ public class ExtractTest {
     
     private static final Instant d1 = Instant.parse("2016-02-17T10:00:00Z");
     private static final Instant d2 = Instant.parse("2016-02-17T11:00:00Z");
+    private static final Instant d3 = Instant.MIN;
+    private static final Instant d4 = Instant.MAX;
     
     private static final Tweet tweet1 = new Tweet(1, "alyssa", "is it reasonable to talk about rivest so much?", d1);
     private static final Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
+    private static final Tweet tweet3 = new Tweet(3, "troy", "@mit is the place to be", d3);
+    private static final Tweet tweet4 = new Tweet(4, "troy", "@MIT rocks till the end of time", d4);
+    private static final Tweet tweet5 = new Tweet(5, "troy", "@MIT @mit @berkely @CalTech @blahdeyBlah", d1);
     
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
@@ -54,8 +61,51 @@ public class ExtractTest {
      * them in a different class. If you only need them in this test class, then
      * keep them in this test class.
      */
+    
+    @Test
+    public void testGetTimespanMinTime() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet3));
+        
+        assertEquals("expected start", d3, timespan.getStart());
+        assertEquals("expected end", d3, timespan.getEnd());
+    }
+    
+    @Test
+    public void testGetTimespanMaxTime() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet4));
+        
+        assertEquals("expected start", d4, timespan.getStart());
+        assertEquals("expected end", d4, timespan.getEnd());
+    }
+    
+    @Test
+    public void testGetMentionedUsersOneMention() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet3));
+        
+        assertEquals(1, mentionedUsers.size());
+        assertTrue("expected empty set", Pattern.matches("[Mm][Ii][Tt]", mentionedUsers.iterator().next()));
+    }
 
-
+    @Test
+    public void testGetMentionedUsersTwoMentionsSameUsername() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet3, tweet4));
+        
+        assertEquals(1, mentionedUsers.size());
+        assertTrue("expected empty set", Pattern.matches("[Mm][Ii][Tt]", mentionedUsers.iterator().next()));
+    }
+    
+    @Test
+    public void testGetMentionedUsersFourUniqueMentions() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet5));
+        Set<String> expected = new HashSet<>(Arrays.asList("mit", "berkely", "caltech", "blahdeyblah"));
+        
+        assertEquals(4, mentionedUsers.size());
+        assertTrue(expected.contains(mentionedUsers.iterator().next().toLowerCase()));
+        assertTrue(expected.contains(mentionedUsers.iterator().next().toLowerCase()));
+        assertTrue(expected.contains(mentionedUsers.iterator().next().toLowerCase()));
+        assertTrue(expected.contains(mentionedUsers.iterator().next().toLowerCase()));
+    }
+    
     /* Copyright (c) 2016 MIT 6.005 course staff, all rights reserved.
      * Redistribution of original or derived work requires explicit permission.
      * Don't post any of this code on the web or to a public Github repository.

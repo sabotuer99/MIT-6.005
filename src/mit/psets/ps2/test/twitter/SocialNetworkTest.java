@@ -24,7 +24,7 @@ public class SocialNetworkTest {
     
     @Test
     public void testGuessFollowsGraphEmpty() {
-        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<>());
+        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
         
         assertTrue("expected empty graph", followsGraph.isEmpty());
     }
