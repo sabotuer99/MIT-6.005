@@ -3,6 +3,7 @@ package twitter;
 import static org.junit.Assert.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,7 +69,14 @@ public class FilterTest {
      * different class. If you only need them in this test class, then keep them
      * in this test class.
      */
-
+    @Test
+    public void testContainingMatchAnyString() {
+        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2), Arrays.asList("talk", "blarg"));
+                
+        assertFalse("expected non-empty list", containing.isEmpty());
+        assertTrue("expected list to contain tweets", containing.containsAll(Arrays.asList(tweet1, tweet2)));
+        assertEquals("expected same order", 0, containing.indexOf(tweet1));
+    }
     
     @Test
     public void testContainingNoSubstrings() {
@@ -112,6 +120,18 @@ public class FilterTest {
     }
     
     @Test
+    public void testInTimespanLengthZeroTimespan() {
+        Instant testTime = Instant.parse("2016-02-17T09:00:00Z");
+        Tweet tweet = new Tweet(2, "bbitdiddle", "rivest talking in 30 minutes #hype", testTime);
+        
+        List<Tweet> inTimespan = Filter.inTimespan(Arrays.asList(tweet), new Timespan(testTime, testTime));
+        
+        assertFalse("expected non-empty list", inTimespan.isEmpty());
+        assertTrue("expected list to contain tweets", inTimespan.contains(tweet));
+        assertEquals("expected same order", 0, inTimespan.indexOf(tweet));
+    }
+    
+    @Test
     public void testWrittenByAllTweetsSameAuthor() {
     	Tweet tweetA = new Tweet(1, "troy", "test 1", Instant.MIN);
     	Tweet tweetB = new Tweet(2, "troy", "test 2", Instant.MIN);
@@ -129,6 +149,20 @@ public class FilterTest {
         
         assertEquals("wrong size list", 1, writtenBy.size());
         assertTrue("expected list to contain tweet", writtenBy.contains(tweetA));
+    }
+    
+    @Test
+    public void testWrittenByAuthorNotFound() {
+        List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet1, tweet2), "nobody");
+        
+        assertTrue("expected empty list", writtenBy.isEmpty());
+    }
+    
+    @Test
+    public void testWrittenByEmptyTweets() {
+        List<Tweet> writtenBy = Filter.writtenBy(new ArrayList<Tweet>(), "nobody");
+        
+        assertTrue("expected empty list", writtenBy.isEmpty());
     }
     /* Copyright (c) 2016 MIT 6.005 course staff, all rights reserved.
      * Redistribution of original or derived work requires explicit permission.

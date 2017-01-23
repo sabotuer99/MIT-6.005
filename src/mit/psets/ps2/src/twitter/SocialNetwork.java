@@ -1,5 +1,11 @@
 package twitter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,7 +44,30 @@ public class SocialNetwork {
      *         either authors or @-mentions in the list of tweets.
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        Map<String, Set<String>> graph = new HashMap<>();
+        
+        for(Tweet tweet : tweets){
+        	String author = tweet.getAuthor();
+        	Set<String> mentions = Extract.getMentionedUsers(Arrays.asList(tweet));
+        	Set<String> follows = graph.containsKey(tweet.getAuthor()) 
+        			                 ? graph.get(tweet.getAuthor()) 
+        			                 : new HashSet<String>();
+        			                 
+        	/*for(String f : follows){
+        		if(!graph.containsKey(f.toLowerCase())){
+        			graph.put(f.toLowerCase(), new HashSet<String>());
+        		}
+        	}	*/                 
+        			                 
+            for(String m : mentions){
+            	if(!m.toLowerCase().equals(author.toLowerCase())){
+            		follows.add(m);
+            	}
+            }
+        	graph.put(tweet.getAuthor(), follows);
+        }
+        
+        return graph;
     }
 
     /**
@@ -51,7 +80,35 @@ public class SocialNetwork {
      *         descending order of follower count.
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
-        throw new RuntimeException("not implemented");
+        final List<String> influencers = new ArrayList<>();
+        final Map<String, Set<String>> followers = new HashMap<>();
+        
+        for(String follower : followsGraph.keySet()){
+        	followers.put(follower.toLowerCase(), new HashSet<String>());
+        }
+        
+        for(String follower : followsGraph.keySet()){
+        	Set<String> followed = followsGraph.get(follower);
+        	for(String user : followed){
+        		Set<String> fans = followers.containsKey(user.toLowerCase()) 
+        				? followers.get(user.toLowerCase()) 
+        				: new HashSet<String>();
+        		fans.add(follower.toLowerCase());
+        		followers.put(user.toLowerCase(), fans);
+        	}
+        }
+        
+        influencers.addAll(followers.keySet());
+        Collections.sort(influencers, new Comparator<String>(){
+			@Override
+			public int compare(String o1, String o2) {
+				Integer c1 = followers.get(o1).size();
+				Integer c2 = followers.get(o2).size();
+				return c2 - c1;
+			}
+        });
+        
+        return influencers;
     }
 
     /* Copyright (c) 2007-2016 MIT 6.005 course staff, all rights reserved.
