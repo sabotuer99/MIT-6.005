@@ -1,6 +1,8 @@
 package twitter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Filter consists of methods that filter a list of tweets for those matching a
@@ -24,7 +26,13 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> result = new ArrayList<>();
+        for(Tweet tweet : tweets){
+        	if(username.toLowerCase().equals(tweet.getAuthor().toLowerCase())){
+        		result.add(tweet);
+        	}
+        }
+        return result;
     }
 
     /**
@@ -38,7 +46,14 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {
-        throw new RuntimeException("not implemented");
+    	List<Tweet> result = new ArrayList<>();
+        for(Tweet tweet : tweets){
+        	if(timespan.getStart().compareTo(tweet.getTimestamp()) <= 0 &&
+        	   timespan.getEnd().compareTo(tweet.getTimestamp()) >= 0){
+        		result.add(tweet);
+        	}
+        }
+        return result;
     }
 
     /**
@@ -57,7 +72,23 @@ public class Filter {
      *         same order as in the input list.
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
-        throw new RuntimeException("not implemented");
+        List<Pattern> patterns = new ArrayList<>();
+        for(String word : words){
+        	patterns.add(Pattern.compile(".*(?<=\\s|^)" + word + "(?=\\s|$).*",Pattern.CASE_INSENSITIVE));
+        }
+        
+        List<Tweet> result = new ArrayList<>();
+        for(Tweet tweet : tweets){
+        	boolean found = false;
+        	for(int i = 0; i < patterns.size() && !found; i++){
+        		found = patterns.get(i).matcher(tweet.getText()).matches();
+        	}
+        	if(found){
+        		result.add(tweet);
+        	}
+        }
+        
+        return result;
     }
 
     /* Copyright (c) 2007-2016 MIT 6.005 course staff, all rights reserved.

@@ -69,7 +69,67 @@ public class FilterTest {
      * in this test class.
      */
 
-
+    
+    @Test
+    public void testContainingNoSubstrings() {
+        Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talking in 30 minutes #hype", d2);
+        List<Tweet> containing = Filter.containing(Arrays.asList(tweet2), Arrays.asList("talk"));
+        
+        assertTrue("expected empty list", containing.isEmpty());
+    }
+    
+    @Test
+    public void testContainingCaseInsensitive() {
+        Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
+        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2), Arrays.asList("TALK"));
+                
+        assertFalse("expected non-empty list", containing.isEmpty());
+        assertTrue("expected list to contain tweets", containing.containsAll(Arrays.asList(tweet1, tweet2)));
+        assertEquals("expected same order", 0, containing.indexOf(tweet1));
+    }
+    
+    @Test
+    public void testInTimespanNoTweetsInSpan() {
+        Instant testStart = Instant.parse("2016-02-17T09:00:00Z");
+        Instant testEnd = Instant.parse("2016-02-17T12:00:00Z");
+        Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talking in 30 minutes #hype", Instant.MIN);
+        
+        List<Tweet> inTimespan = Filter.inTimespan(Arrays.asList(tweet2), new Timespan(testStart, testEnd));
+        
+        assertTrue("expected empty list", inTimespan.isEmpty());
+    }
+    
+    @Test
+    public void testInTimespanIgnoresOrder() {
+        Instant testStart = Instant.parse("2016-02-17T09:00:00Z");
+        Instant testEnd = Instant.parse("2016-02-17T12:00:00Z");
+        
+        List<Tweet> inTimespan = Filter.inTimespan(Arrays.asList(tweet2, tweet1), new Timespan(testStart, testEnd));
+        
+        assertFalse("expected non-empty list", inTimespan.isEmpty());
+        assertTrue("expected list to contain tweets", inTimespan.containsAll(Arrays.asList(tweet1, tweet2)));
+        assertEquals("expected same order", 0, inTimespan.indexOf(tweet2));
+    }
+    
+    @Test
+    public void testWrittenByAllTweetsSameAuthor() {
+    	Tweet tweetA = new Tweet(1, "troy", "test 1", Instant.MIN);
+    	Tweet tweetB = new Tweet(2, "troy", "test 2", Instant.MIN);
+    	List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweetA, tweetB), "troy");
+        
+        assertEquals("wrong size list", 2, writtenBy.size());
+        assertTrue("expected list to contain tweet", writtenBy.contains(tweetA));
+        assertTrue("expected list to contain tweet", writtenBy.contains(tweetB));
+    }
+    
+    @Test
+    public void testWrittenByCaseInsensitive() {
+    	Tweet tweetA = new Tweet(1, "troy", "test 1", Instant.MIN);
+    	List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweetA), "Troy");
+        
+        assertEquals("wrong size list", 1, writtenBy.size());
+        assertTrue("expected list to contain tweet", writtenBy.contains(tweetA));
+    }
     /* Copyright (c) 2016 MIT 6.005 course staff, all rights reserved.
      * Redistribution of original or derived work requires explicit permission.
      * Don't post any of this code on the web or to a public Github repository.
