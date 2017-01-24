@@ -14,16 +14,25 @@ public class BookCopyTest {
      * Testing strategy
      * ==================
      * 
-     * TODO: your testing strategy for this ADT should go here.
-     * Make sure you have partitions.
+     * Partitions:
+     *     book: null (fail), valid
+     *     condition: good, damaged
+     *     equals: reference equality
+
      */
     
-    // TODO: put JUnit @Test methods here that you developed from your testing strategy
+	private static Book book1 = new Book("Test Book", Arrays.asList("John. Q. Tester"), 1990);
+    
     @Test
-    public void testExampleTest() {
-        Book book = new Book("This Test Is Just An Example", Arrays.asList("You Should", "Replace It", "With Your Own Tests"), 1990);
-        BookCopy copy = new BookCopy(book);
-        assertEquals(book, copy.getBook());
+    public void BookCopy_sanityCheck() {
+        BookCopy copy = new BookCopy(book1);
+        assertEquals(book1, copy.getBook());
+        assertEquals(BookCopy.Condition.GOOD, copy.getCondition());
+    }
+    
+    @Test(expected=AssertionError.class)
+    public void BookCopy_ctor_nullBook_fails() {
+    	new BookCopy(null);
     }
     
     @Test(expected=AssertionError.class)
