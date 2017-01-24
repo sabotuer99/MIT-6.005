@@ -1,6 +1,8 @@
 package library;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Book is an immutable type representing an edition of a book -- not the physical object, 
@@ -10,11 +12,27 @@ import java.util.List;
  */
 public class Book {
 
-    // TODO: rep
+    // rep
+    private int year;
+    private List<String> authors;
+    private String title;
+    private String stringified;
+	private static Pattern nonSpace = Pattern.compile("[^\\s]");
     
-    // TODO: rep invariant
-    // TODO: abstraction function
-    // TODO: safety from rep exposure argument
+    
+    // rep invariant
+    //   year is nonnegative
+    //   authors is not empty, each name has at least one non-space
+    //   title contains at least one non-space character
+    
+    // abstraction function
+	//   year is represented as a primative non-negative int value
+	//   authors are stored as a list of strings, and title is a string
+	
+    // safety from rep exposure argument
+	//   title and year are private, immutable fields
+	//   the list of authors is mutable, however is defensively copied when created and observed
+	//   individual author values are stored as String, which is immutable
     
     /**
      * Make a Book.
@@ -24,33 +42,53 @@ public class Book {
      * @param year Year when this edition was published in the conventional (Common Era) calendar.  Must be nonnegative. 
      */
     public Book(String title, List<String> authors, int year) {
-        throw new RuntimeException("not implemented yet");
+        this.title = title;
+        this.authors = new ArrayList<>(authors);
+        this.year = year;
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append(title).append(", ").append(year).append(", by ");
+        for(String author : authors){
+        	sb.append(author).append(", ");
+        }
+        sb.setLength(sb.length() - 2);//drop last comma from authors
+        this.stringified = sb.toString();
+        
+        checkRep();
     }
     
     // assert the rep invariant
     private void checkRep() {
-        throw new RuntimeException("not implemented yet");
+        assert year > 0;
+        assert nonSpace.matcher(title).matches();
+        assert title != null;
+        assert authors != null;
+        assert authors.size() > 0;
+        for(String author : authors){
+        	assert author != null;
+        	assert nonSpace.matcher(author).matches();
+        }
     }
     
     /**
      * @return the title of this book
      */
     public String getTitle() {
-        throw new RuntimeException("not implemented yet");
+        return title;
     }
     
     /**
      * @return the authors of this book
      */
     public List<String> getAuthors() {
-        throw new RuntimeException("not implemented yet");
+        return new ArrayList<>(authors);
     }
 
     /**
      * @return the year that this book was published
      */
     public int getYear() {
-        throw new RuntimeException("not implemented yet");
+        return year;
     }
 
     /**
@@ -58,20 +96,22 @@ public class Book {
      *    authors, and publication year
      */
     public String toString() {
-        throw new RuntimeException("not implemented yet");
+        return stringified;
     }
 
     // uncomment the following methods if you need to implement equals and hashCode,
     // or delete them if you don't
-    // @Override
-    // public boolean equals(Object that) {
-    //     throw new RuntimeException("not implemented yet");
-    // }
-    // 
-    // @Override
-    // public int hashCode() {
-    //     throw new RuntimeException("not implemented yet");
-    // }
+     @Override
+     public boolean equals(Object that) {
+         if(!(that instanceof Book)) return false;
+         Book o = (Book) that;
+         return o.stringified.equals(this.stringified);
+     }
+     
+     @Override
+     public int hashCode() {
+         return stringified.hashCode();
+     }
 
 
 

@@ -34,7 +34,7 @@ public class SmallLibrary implements Library {
     
     // assert the rep invariant
     private void checkRep() {
-        throw new RuntimeException("not implemented yet");
+    	throw new RuntimeException("not implemented yet");
     }
 
     @Override
