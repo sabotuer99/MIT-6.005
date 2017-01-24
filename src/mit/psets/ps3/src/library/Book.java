@@ -17,7 +17,7 @@ public class Book {
     private List<String> authors;
     private String title;
     private String stringified;
-	private static Pattern nonSpace = Pattern.compile("[^\\s]");
+	private static Pattern nonSpace = Pattern.compile(".*[^\\s].*");
     
     
     // rep invariant
@@ -42,6 +42,9 @@ public class Book {
      * @param year Year when this edition was published in the conventional (Common Era) calendar.  Must be nonnegative. 
      */
     public Book(String title, List<String> authors, int year) {
+    	assert authors != null;
+    	assert title != null;
+    	
         this.title = title;
         this.authors = new ArrayList<>(authors);
         this.year = year;
@@ -49,7 +52,7 @@ public class Book {
         StringBuilder sb = new StringBuilder();
         sb.append(title).append(", ").append(year).append(", by ");
         for(String author : authors){
-        	sb.append(author).append(", ");
+        	sb.append("'" + author + "'").append(", ");
         }
         sb.setLength(sb.length() - 2);//drop last comma from authors
         this.stringified = sb.toString();
@@ -59,7 +62,7 @@ public class Book {
     
     // assert the rep invariant
     private void checkRep() {
-        assert year > 0;
+        assert year >= 0;
         assert nonSpace.matcher(title).matches();
         assert title != null;
         assert authors != null;
@@ -105,7 +108,7 @@ public class Book {
      public boolean equals(Object that) {
          if(!(that instanceof Book)) return false;
          Book o = (Book) that;
-         return o.stringified.equals(this.stringified);
+         return o.stringified.equals(this.stringified) && o.authors.size() == this.authors.size();
      }
      
      @Override
