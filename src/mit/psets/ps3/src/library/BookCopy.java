@@ -29,6 +29,7 @@ public class BookCopy {
      * @param book the Book of which this is a copy
      */
     public BookCopy(Book book) {
+    	assert book != null;
         this.book = book;
         this.condition = Condition.GOOD;
     }
