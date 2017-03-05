@@ -6,11 +6,19 @@ package library;
  */
 public class BookCopy {
 
-    // TODO: rep
-    
-    // TODO: rep invariant
-    // TODO: abstraction function
-    // TODO: safety from rep exposure argument
+    // rep
+    	private Book book;
+    	private Condition condition;
+	
+    // rep invariant
+    //  book and condition cannot be null
+    	
+    // abstraction function
+    //   ???
+    	
+    // safety from rep exposure argument
+    //   book is private and immutable
+    //   condition is private, enums are immutable
     
     public static enum Condition {
         GOOD, DAMAGED
@@ -21,26 +29,29 @@ public class BookCopy {
      * @param book the Book of which this is a copy
      */
     public BookCopy(Book book) {
-        throw new RuntimeException("not implemented yet");
+    	assert book != null;
+        this.book = book;
+        this.condition = Condition.GOOD;
     }
     
     // assert the rep invariant
     private void checkRep() {
-        throw new RuntimeException("not implemented yet");
+        assert book != null;
+        assert condition != null;
     }
     
     /**
      * @return the Book of which this is a copy
      */
     public Book getBook() {
-        throw new RuntimeException("not implemented yet");
+        return book;
     }
     
     /**
      * @return the condition of this book copy
      */
     public Condition getCondition() {
-        throw new RuntimeException("not implemented yet");
+        return condition;
     }
 
     /**
@@ -48,7 +59,8 @@ public class BookCopy {
      * @param condition the latest condition of the book copy
      */
     public void setCondition(Condition condition) {
-        throw new RuntimeException("not implemented yet");
+        this.condition = condition;
+        checkRep();
     }
     
     /**
@@ -56,7 +68,7 @@ public class BookCopy {
      *    and the words "good" or "damaged" depending on its condition
      */
     public String toString() {
-        throw new RuntimeException("not implemented yet");
+        return book.toString() + " " + condition.toString().toLowerCase();
     }
 
     // uncomment the following methods if you need to implement equals and hashCode,

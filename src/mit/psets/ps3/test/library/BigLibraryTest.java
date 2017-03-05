@@ -37,6 +37,24 @@ public class BigLibraryTest {
         assert false; // make sure assertions are enabled with VM argument: -ea
     }
 
+    private static final Book b1 = new Book("a", Arrays.asList("a"), 1990);
+    
+    @Test
+    public void BigLibrary_testIsAvailable_newBook(){
+    	Library library = new BigLibrary();
+    	library.buy(b1);
+    	BookCopy copy = library.availableCopies(b1).iterator().next();
+    	assertTrue(library.isAvailable(copy));
+    }
+    
+    @Test
+    public void BigLibrary_testIsAvailable_lostBook(){
+    	Library library = new BigLibrary();
+    	library.buy(b1);
+    	BookCopy copy = library.availableCopies(b1).iterator().next();
+    	library.lose(copy);
+    	assertFalse(library.isAvailable(copy));
+    }
 
     /* Copyright (c) 2016 MIT 6.005 course staff, all rights reserved.
      * Redistribution of original or derived work requires explicit permission.
