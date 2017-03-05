@@ -52,7 +52,7 @@ public class BookTest {
     
     @Test(expected=AssertionError.class)
     public void Book_ctor_emptyAuthorList_fails() {
-    	new Book("valid", new ArrayList<>(), 0);
+    	new Book("valid", new ArrayList<String>(), 0);
     }
     
     @Test(expected=AssertionError.class)
