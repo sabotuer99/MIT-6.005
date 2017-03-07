@@ -1,12 +1,18 @@
 package expressivo;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import expressivo.expression.*;
+import expressivo.expression.Addition;
+import expressivo.expression.ExpressionEvaluator;
+import expressivo.expression.Multiplication;
 import expressivo.expression.Number;
-import lib6005.parser.*;
+import expressivo.expression.Variable;
+import lib6005.parser.GrammarCompiler;
+import lib6005.parser.ParseTree;
+import lib6005.parser.Parser;
 
 /**
  * An immutable data type representing a polynomial expression of:
@@ -64,42 +70,77 @@ public interface Expression {
 
         switch(p.getName()){
 
-        case ROOT:
-        case EXPRESSION:	
+        case ROOT:{
+        	/*
+        	 * root has a single expression child
+        	 */
+        	return buildAST(p.children().get(0));
+        }
+        case EXPRESSION:{
+        	/*
+        	 * expression has a single child, either a primitive,
+        	 * addition, or subtraction
+        	 */
+        	return buildAST(p.children().get(0));
+        }	
 
-        case ADDITION:
-        case SUBTRACTION:       
+        case ADDITION:{
+        	/*
+        	 * addition can have many children, get those as expressions 
+        	 * first to create addition expression
+        	 */
+        	List<Expression> terms = new ArrayList<>();
+        	for(ParseTree<ExpressionGrammar> sub : p.children()){
+        		terms.add(buildAST(sub));
+        	}
+        	
+        	return new Addition(terms);
+        }
+        
+        case SUBTRACTION:{
+        	throw new RuntimeException("Subraction not supported:" + p);
+        }
 
-		case MULTIPLICATION:
-		case DIVISION:
+		case MULTIPLICATION:{
+        	/*
+        	 * addition can have many children, get those as expressions 
+        	 * first to create addition expression
+        	 */
+        	List<Expression> terms = new ArrayList<>();
+        	for(ParseTree<ExpressionGrammar> sub : p.children()){
+        		terms.add(buildAST(sub));
+        	}
+        	
+        	return new Multiplication(terms);
+        }
 		
+		case DIVISION:{
+        	throw new RuntimeException("Division not supported:" + p);
+        }
 
+        case PRIMITIVE: {
+        	// A primitive can only have one child, so just return 
+        	// the AST of that child
+        	return buildAST(p.children().get(0));
+        	}
+        
+        case NUMBER:{
+        	// A number is always a single literal, build and return
+            return new Number(Integer.parseInt(p.getContents()));
+        	}
+        
+        case VARIABLE:{
+        	// A variable is always a single literal, build and return
+        	return new Variable(p.getContents());
+        	}
+        
         case WHITESPACE: {
             /*
              * Since we are always avoiding calling buildAST with whitespace, 
              * the code should never make it here. 
              */
             throw new RuntimeException("You should never reach here:" + p);
-        }
-		
-		
-		
-			
-        case PRIMITIVE: {
-        	// A primitive can only have one child, so just return 
-        	// the AST of that child
-        	return buildAST(p.children().get(0));
-        }
-        case NUMBER:{
-        	// A number is always a single literal, build and return
-            return new Number(Integer.parseInt(p.getContents()));
-        }
-        case VARIABLE:{
-        	// A variable is always a single literal, build and return
-        	return new Variable(p.getContents());
-        }
-		default:
-			break;
+        	}
         }   
         /*
          * The compiler should be smart enough to tell that this code is unreachable, but it isn't.

@@ -15,15 +15,23 @@ public class Addition implements Expression {
 		this.terms = new ArrayList<>(terms);
 	}
 	
-	@Override
+	private String stringified;
 	public String toString(){
-		String s = "(";
-		for(Expression term : terms){
-			s += term.toString() + "+";
+		
+		if(stringified == null){
+			String s = "(";
+			for(Expression term : terms){
+				s += term.toString() + "+";
+			}
+			s = s.substring(0, s.length() - 1);
+			s += ")";
+			
+			stringified = s;
+			return s;
+		} else {
+			return stringified;
 		}
-		s = s.substring(0, s.length() - 1);
-		s += ")";
-		return s;
+		
 	}
 
 	@Override
@@ -41,6 +49,11 @@ public class Addition implements Expression {
 		}
 	}
 
+	@Override
+	public int hashCode(){
+		return toString().hashCode();
+	}
+	
 	@Override
 	public ExpressionEvaluator getEvaluator(final Map<String,Double> environment) {
 		

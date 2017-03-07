@@ -22,6 +22,22 @@ public class Variable implements Expression {
 	public String toString(){
 		return name;
 	}
+	
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof Variable){
+			Variable other = (Variable) o;
+			return this.toString().equals(other.toString());
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode(){
+		return name.hashCode();
+	}
 
 	@Override
 	public ExpressionEvaluator getEvaluator(final Map<String, Double> environment) {

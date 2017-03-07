@@ -15,15 +15,23 @@ public class Multiplication implements Expression {
 		this.terms = new ArrayList<>(terms);
 	}
 	
+	private String stringified;
 	@Override
 	public String toString(){
-		String s = "(";
-		for(Expression term : terms){
-			s += term.toString() + "*";
+		if(stringified == null){
+			String s = "(";
+			for(Expression term : terms){
+				s += term.toString() + "*";
+			}
+			s = s.substring(0, s.length() - 1);
+			s += ")";
+			
+			stringified = s;
+			return s;
+		} else {
+			return stringified;
 		}
-		s = s.substring(0, s.length() - 1);
-		s += ")";
-		return s;
+		
 	}
 	
 	@Override
@@ -39,6 +47,11 @@ public class Multiplication implements Expression {
 		} else {
 			return false;
 		}
+	}
+	
+	@Override
+	public int hashCode(){
+		return toString().hashCode();
 	}
 	
 	@Override
