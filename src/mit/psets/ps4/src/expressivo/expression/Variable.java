@@ -29,6 +29,9 @@ public class Variable implements Expression {
 
 			@Override
 			public Maybe<Double> getNumericValue() {
+				if(environment == null){
+					return new Maybe<Double>(null);
+				}
 				return new Maybe<Double>(environment.get(name));
 			}
 
