@@ -119,9 +119,6 @@ public class ExpressionTest {
     			
     	boolean result = sut1.equals(sut2);
     	
-    	System.out.println(sut1.toString());
-    	System.out.println(sut2.toString());
-    	
     	assertTrue(result);
     }
     
@@ -131,51 +128,7 @@ public class ExpressionTest {
     	
     	assertEquals("1.0000", sut.toString());
     }
-    
-    @Ignore
-    @Test
-    public void parseSanityCheck() throws Exception{
-    	
-    	Parser<ExpressionGrammar> parser =
-			     GrammarCompiler.compile(new File(getPath(), 
-			    		 "Expression.g"), ExpressionGrammar.ROOT); 
-    	
-    	ParseTree<ExpressionGrammar> tree = parser.parse("5+5*5");
-    	
-    	visitAll(tree, "  ");
-    	
-        tree = parser.parse("5*5+5");
-    	
-    	visitAll(tree, "  ");
-    	
-    	tree = parser.parse("5*(X+5)");
-    	
-    	visitAll(tree, "  ");
-    	
-    	tree = parser.parse("5");
-    	
-    	visitAll(tree, "  ");
-    	
-    	tree = parser.parse("(5) + (5)");
-    	
-    	visitAll(tree, "  ");
-    	
-    	tree = parser.parse("((5) + (5))");
-    	
-    	visitAll(tree, "  ");
-    	
-    	tree = parser.parse("(x + y) * ((5 + w) +52) + 1 + 2 + 3");
-    	//tree.display();
-    	visitAll(tree, "");
-    	
-    	Expression root = Expression.parse("5*5+5");
-    	
-    	System.out.println(root.toString());
-    	
-    	root = Expression.parse("(x + y) * ((5 + w) +52) + 1 + 2 + 3");
-    	System.out.println(root.toString());
-    }
-    
+
 	/**
 	 * Traverse a parse tree, indenting to make it easier to read.
 	 * @param node
