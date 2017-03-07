@@ -48,7 +48,7 @@ public interface Expression {
 				
 				ParseTree<ExpressionGrammar> tree = parser.parse(input);
 				
-				
+				return buildAST(tree);
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -74,14 +74,14 @@ public interface Expression {
         	/*
         	 * root has a single expression child
         	 */
-        	return buildAST(p.children().get(0));
+        	return buildAST(filterws(p).get(0));
         }
         case EXPRESSION:{
         	/*
         	 * expression has a single child, either a primitive,
         	 * addition, or subtraction
         	 */
-        	return buildAST(p.children().get(0));
+        	return buildAST(filterws(p).get(0));
         }	
 
         case ADDITION:{
@@ -90,8 +90,8 @@ public interface Expression {
         	 * first to create addition expression
         	 */
         	List<Expression> terms = new ArrayList<>();
-        	for(ParseTree<ExpressionGrammar> sub : p.children()){
-        		terms.add(buildAST(sub));
+        	for(ParseTree<ExpressionGrammar> sub : filterws(p)){
+            	terms.add(buildAST(sub));
         	}
         	
         	return new Addition(terms);
@@ -107,8 +107,8 @@ public interface Expression {
         	 * first to create addition expression
         	 */
         	List<Expression> terms = new ArrayList<>();
-        	for(ParseTree<ExpressionGrammar> sub : p.children()){
-        		terms.add(buildAST(sub));
+        	for(ParseTree<ExpressionGrammar> sub : filterws(p)){
+        			terms.add(buildAST(sub));
         	}
         	
         	return new Multiplication(terms);
@@ -119,9 +119,12 @@ public interface Expression {
         }
 
         case PRIMITIVE: {
-        	// A primitive can only have one child, so just return 
+        	// A primitive can only have one non-whitespace child, so just return 
         	// the AST of that child
-        	return buildAST(p.children().get(0));
+	        	for(ParseTree<ExpressionGrammar> sub : filterws(p)){
+	        		return buildAST(sub);
+	        	}
+	        	throw new RuntimeException("Primitive should never reach here:" + p);
         	}
         
         case NUMBER:{
@@ -139,7 +142,7 @@ public interface Expression {
              * Since we are always avoiding calling buildAST with whitespace, 
              * the code should never make it here. 
              */
-            throw new RuntimeException("You should never reach here:" + p);
+            throw new RuntimeException("Whitespace should never reach here:" + p);
         	}
         }   
         /*
@@ -148,7 +151,16 @@ public interface Expression {
         throw new RuntimeException("You should never reach here:" + p);
     }
     
-    
+    static List<ParseTree<ExpressionGrammar>> filterws(ParseTree<ExpressionGrammar> node){
+    	List<ParseTree<ExpressionGrammar>> filtered = new ArrayList<>();
+    	for(ParseTree<ExpressionGrammar> sub : node.children()){
+    		if(!sub.getName().equals(ExpressionGrammar.WHITESPACE)){
+    			filtered.add(sub);
+    		}
+    	}
+    	
+    	return filtered;
+    }
     
     /**
      * @return a parsable representation of this expression, such that

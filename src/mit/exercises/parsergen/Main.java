@@ -12,7 +12,7 @@ public class Main {
 			     GrammarCompiler.compile(new File(getPath(), 
 			    		 "IntegerExpression.g"), IntegerGrammar.ROOT); 
 		
-		ParseTree<IntegerGrammar> tree = parser.parse("5+2+3+21");
+		ParseTree<IntegerGrammar> tree = parser.parse("5 + 2 + 3 + 21");
 		
 		System.out.println(tree.toString());
 		

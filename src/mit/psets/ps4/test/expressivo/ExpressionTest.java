@@ -127,9 +127,16 @@ public class ExpressionTest {
     	
     	visitAll(tree, "  ");
     	
-    	tree = parser.parse("5*5*5*5*5*5");
+    	tree = parser.parse("(x + y) * ((5 + w) +52) + 1 + 2 + 3");
+    	tree.display();
+    	visitAll(tree, "");
     	
-    	visitAll(tree, "  ");
+    	Expression root = Expression.parse("5*5+5");
+    	
+    	System.out.println(root.toString());
+    	
+    	root = Expression.parse("(x + y) * ((5 + w) +52) + 1 + 2 + 3");
+    	System.out.println(root.toString());
     }
     
 	/**
@@ -145,7 +152,7 @@ public class ExpressionTest {
 	    }else{
 	        System.out.println(indent + node.getName());
 	        for(ParseTree<ExpressionGrammar> child: node){
-	            visitAll(child, indent + "   ");
+	            visitAll(child, indent + "|  ");
 	        }
 	    }
 	}

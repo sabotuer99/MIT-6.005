@@ -30,7 +30,7 @@
 }
 
 number ::= [0-9]+;
-variable ::= [A-Za-z_]+;
+variable ::= [A-Za-z]+;
 whitespace ::= [ ]+;
 
 /*
