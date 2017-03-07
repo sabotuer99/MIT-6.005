@@ -16,6 +16,7 @@ import lib6005.parser.GrammarCompiler;
 import lib6005.parser.ParseTree;
 import lib6005.parser.Parser;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -96,6 +97,42 @@ public class ExpressionTest {
     	assertTrue(result);
     }
     
+    @Test(expected=IllegalArgumentException.class)
+    public void Parse_InvalidInput_ThrowsIllegalArgumentException(){
+    	Expression.parse("!");
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void Parse_EmptyInput_ThrowsIllegalArgumentException(){
+    	Expression.parse("");
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void Parse_NullInput_ThrowsIllegalArgumentException(){
+    	Expression.parse(null);
+    }
+    
+    @Test
+    public void Parse_TwoEquivalentExpressions_ReturnsEqualASTs(){
+    	Expression sut1 = Expression.parse("5+5*5");
+    	Expression sut2 = Expression.parse("((5.000)     + ((5.0) *    5.00000))    ");
+    			
+    	boolean result = sut1.equals(sut2);
+    	
+    	System.out.println(sut1.toString());
+    	System.out.println(sut2.toString());
+    	
+    	assertTrue(result);
+    }
+    
+    @Test
+    public void Parse_SingleFloatExpression_ReturnsCorrectExpression(){
+    	Expression sut = Expression.parse("1.0");
+    	
+    	assertEquals("1.0000", sut.toString());
+    }
+    
+    @Ignore
     @Test
     public void parseSanityCheck() throws Exception{
     	
@@ -128,7 +165,7 @@ public class ExpressionTest {
     	visitAll(tree, "  ");
     	
     	tree = parser.parse("(x + y) * ((5 + w) +52) + 1 + 2 + 3");
-    	tree.display();
+    	//tree.display();
     	visitAll(tree, "");
     	
     	Expression root = Expression.parse("5*5+5");

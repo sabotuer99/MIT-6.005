@@ -53,11 +53,9 @@ public interface Expression {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				IllegalArgumentException ex = new IllegalArgumentException("Unable to parse: \"" + input + "\"", e);
+				throw ex;
 			} 
-		
-			
-			
-		return null;
 	}
 
 	/**
@@ -94,7 +92,12 @@ public interface Expression {
             	terms.add(buildAST(sub));
         	}
         	
-        	return new Addition(terms);
+        	//if there is only one term, just pass it through
+        	if(terms.size() == 1){
+        		return terms.get(0);
+        	} else {
+        		return new Addition(terms);
+        	}
         }
         
         case SUBTRACTION:{
@@ -111,7 +114,12 @@ public interface Expression {
         			terms.add(buildAST(sub));
         	}
         	
-        	return new Multiplication(terms);
+        	//if there is only one term, just pass it through
+        	if(terms.size() == 1){
+        		return terms.get(0);
+        	} else {
+        		return new Multiplication(terms);
+        	}
         }
 		
 		case DIVISION:{
@@ -129,7 +137,7 @@ public interface Expression {
         
         case NUMBER:{
         	// A number is always a single literal, build and return
-            return new Number(Integer.parseInt(p.getContents()));
+            return new Number(Double.parseDouble(p.getContents()));
         	}
         
         case VARIABLE:{
