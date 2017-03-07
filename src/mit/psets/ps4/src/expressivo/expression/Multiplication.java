@@ -66,16 +66,6 @@ public class Multiplication implements Expression {
 
 
 			@Override
-			public String evaluate() {
-				String result = getSymbolicValue();
-				for(Double value : getNumericValue().getValue()){
-					result = value.toString();
-				}
-				
-				return result;
-			}
-
-			@Override
 			public Maybe<Double> getNumericValue() {
 				Double value = null;
 				

@@ -3,25 +3,28 @@
  */
 package expressivo;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.experimental.runners.Enclosed;
 
-import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import expressivo.expression.Addition;
 import expressivo.expression.Multiplication;
 import expressivo.expression.Number;
 import expressivo.expression.Variable;
-import lib6005.parser.GrammarCompiler;
 import lib6005.parser.ParseTree;
-import lib6005.parser.Parser;
-
-import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  * Tests for the Expression abstract data type.
  */
+@RunWith(Enclosed.class)
 public class ExpressionTest {
 
     // Testing strategy
@@ -34,101 +37,250 @@ public class ExpressionTest {
     
     
     // TODO tests for Expression
-    @Test
-    public void Addition_TwoNumberSubExpressions_evaluateReturnsSum(){
-    	Expression a = new Number(1);
-    	Expression b = new Number(2);
-    	Expression sut = new Addition(Arrays.asList(a,b));
-    	
-    	String result = sut.toString();
-    	
-    	assertEquals("(1.0000+2.0000)", result);
+    public static class AdditionTest{
+	    @Test
+	    public void AdditionEval_TwoNumbers_ReturnsOneNumber(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Number(2);
+	    	Expression sut = new Addition(Arrays.asList(a,b));
+	    	
+	    	String result = sut.getEvaluator(null).getSymbolicValue();
+	    	
+	    	assertEquals("(3.0000)", result);
+	    }
+	    
+	    @Test
+	    public void AdditionEval_TwoVarsNullEnvironment_ReturnsSymbolic(){
+	    	Expression a = new Variable("A");
+	    	Expression b = new Variable("B");
+	    	Expression sut = new Addition(Arrays.asList(a,b));
+	    	
+	    	String result = sut.getEvaluator(null).getSymbolicValue();
+	    	
+	    	assertEquals("(A+B)", result);
+	    }
+	    
+	    @Test
+	    public void AdditionEval_TwoVarsOneAssigned_ReturnsPartialSymbolic(){
+	    	Expression a = new Variable("A");
+	    	Expression b = new Variable("B");
+	    	Expression sut = new Addition(Arrays.asList(a,b));
+	    	
+	    	Map<String,Double> env = new HashMap<>();
+	    	env.put("A", 5.0);
+	    	
+	    	String result = sut.getEvaluator(env).getSymbolicValue();
+	    	
+	    	assertEquals("(5.0000+B)", result);
+	    }
+	    
+	    @Test
+	    public void AdditionEval_TwoVarsBothAssigned_ReturnsSummedValue(){
+	    	Expression a = new Variable("A");
+	    	Expression b = new Variable("B");
+	    	Expression sut = new Addition(Arrays.asList(a,b));
+	    	
+	    	Map<String,Double> env = new HashMap<>();
+	    	env.put("A", 5.0);
+	    	env.put("B", 11.0);
+	    	
+	    	String result = sut.getEvaluator(env).getSymbolicValue();
+	    	
+	    	assertEquals("(16.0000)", result);
+	    }
+	    
+	    
+	    @Test
+	    public void Addition_TwoNumberSubExpressions_toStringIsRight(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Number(2);
+	    	Expression sut = new Addition(Arrays.asList(a,b));
+	    	
+	    	String result = sut.toString();
+	    	
+	    	assertEquals("(1.0000+2.0000)", result);
+	    }
+	    
+	    @Test
+	    public void Addition_TwoEquivilentExpressions_EqualsReturnsTrue(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Number(2);
+	    	Expression test = new Addition(Arrays.asList(a,b));
+	    	
+	    	Expression c = new Number(1);
+	    	Expression d = new Number(2);
+	    	Expression sut = new Addition(Arrays.asList(c,d));
+	    	
+	    	boolean result = sut.equals(test);
+	    	
+	    	assertTrue(result);
+	    }
+	    
+	    @Test
+	    public void Addition_TwoEquivilentExpressionsDifferentOrder_EqualsReturnsFalse(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Number(2);
+	    	Expression test = new Addition(Arrays.asList(a,b));
+	    	
+	    	Expression c = new Number(2);
+	    	Expression d = new Number(1);
+	    	Expression sut = new Addition(Arrays.asList(c,d));
+	    	
+	    	boolean result = sut.equals(test);
+	    	
+	    	assertFalse(result);
+	    }
+	    
+	    @Test
+	    public void Addition_TwoDifferentExpressions_DifferentHashCodes(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Number(2);
+	    	Expression test = new Addition(Arrays.asList(a,b));
+	    	
+	    	Expression c = new Number(2);
+	    	Expression d = new Number(1);
+	    	Expression sut = new Addition(Arrays.asList(c,d));
+	    	
+	    	int hc1 = sut.hashCode();
+	    	int hc2 = test.hashCode();
+	    	
+	    	assertTrue(hc1 != hc2);
+	    }
+    
     }
     
-    @Test
-    public void Addition_TwoEquivilentExpressions_EqualsReturnsTrue(){
-    	Expression a = new Number(1);
-    	Expression b = new Number(2);
-    	Expression test = new Addition(Arrays.asList(a,b));
-    	
-    	Expression c = new Number(1);
-    	Expression d = new Number(2);
-    	Expression sut = new Addition(Arrays.asList(c,d));
-    	
-    	boolean result = sut.equals(test);
-    	
-    	assertTrue(result);
-    }
     
-    @Test
-    public void Multiplication_TwoEquivilentExpressions_EqualsReturnsTrue(){
-    	Expression a = new Number(1);
-    	Expression b = new Number(2);
-    	Expression test = new Multiplication(Arrays.asList(a,b));
-    	
-    	Expression c = new Number(1);
-    	Expression d = new Number(2);
-    	Expression sut = new Multiplication(Arrays.asList(c,d));
-    	
-    	boolean result = sut.equals(test);
-    	
-    	assertTrue(result);
-    }
+    public static class MultiplicationTest{
+    
+	    @Test
+	    public void Multiplication_TwoEquivilentExpressions_EqualsReturnsTrue(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Number(2);
+	    	Expression test = new Multiplication(Arrays.asList(a,b));
+	    	
+	    	Expression c = new Number(1);
+	    	Expression d = new Number(2);
+	    	Expression sut = new Multiplication(Arrays.asList(c,d));
+	    	
+	    	boolean result = sut.equals(test);
+	    	
+	    	assertTrue(result);
+	    }
+	    
+	    @Test
+	    public void Multiplication_TwoEquivilentExpressionsDifferentOrder_EqualsReturnsFalse(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Number(2);
+	    	Expression test = new Multiplication(Arrays.asList(a,b));
+	    	
+	    	Expression c = new Number(2);
+	    	Expression d = new Number(1);
+	    	Expression sut = new Multiplication(Arrays.asList(c,d));
+	    	
+	    	boolean result = sut.equals(test);
+	    	
+	    	assertFalse(result);
+	    }
+	    
+	    @Test
+	    public void Multiplication_TwoDifferentExpressions_DifferentHashCodes(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Number(2);
+	    	Expression test = new Multiplication(Arrays.asList(a,b));
+	    	
+	    	Expression c = new Number(2);
+	    	Expression d = new Number(1);
+	    	Expression sut = new Multiplication(Arrays.asList(c,d));
+	    	
+	    	int hc1 = sut.hashCode();
+	    	int hc2 = test.hashCode();
+	    	
+	    	assertTrue(hc1 != hc2);
+	    }
 
-    @Test
-    public void Variable_TwoEquivilentExpressions_EqualsReturnsTrue(){
-
-    	Expression test = new Variable("A");
-    	Expression sut = new Variable("A");
-    	
-    	boolean result = sut.equals(test);
-    	
-    	assertTrue(result);
+   }
+    
+    public static class VariableTest{
+	    @Test
+	    public void Variable_TwoEquivilentExpressions_EqualsReturnsTrue(){
+	
+	    	Expression test = new Variable("A");
+	    	Expression sut = new Variable("A");
+	    	
+	    	boolean result = sut.equals(test);
+	    	
+	    	assertTrue(result);
+	    }
+	    
+	    @Test
+	    public void Variable_DifferentExpressions_DifferentHashcodes(){
+	
+	    	Expression test = new Variable("A");
+	    	Expression sut = new Variable("B");
+	    	
+	    	boolean result = sut.hashCode() != test.hashCode();
+	    	
+	    	assertTrue(result);
+	    }
     }
     
-    @Test
-    public void Number_TwoEquivilentExpressions_EqualsReturnsTrue(){
-
-    	Expression test = new Number(1);
-    	Expression sut = new Number(1);
-    	
-    	boolean result = sut.equals(test);
-    	
-    	assertTrue(result);
+    public static class NumberTest{
+	    @Test
+	    public void Number_TwoEquivilentExpressions_EqualsReturnsTrue(){
+	
+	    	Expression test = new Number(1);
+	    	Expression sut = new Number(1);
+	    	
+	    	boolean result = sut.equals(test);
+	    	
+	    	assertTrue(result);
+	    }
+	    
+	    @Test
+	    public void Number_DifferentExpressions_DifferentHashcodes(){
+	
+	    	Expression test = new Number(1);
+	    	Expression sut = new Number(2);
+	    	
+	    	boolean result = sut.hashCode() != test.hashCode();
+	    	
+	    	assertTrue(result);
+	    }
     }
     
-    @Test(expected=IllegalArgumentException.class)
-    public void Parse_InvalidInput_ThrowsIllegalArgumentException(){
-    	Expression.parse("!");
+    public static class ParseTest{
+	    @Test(expected=IllegalArgumentException.class)
+	    public void Parse_InvalidInput_ThrowsIllegalArgumentException(){
+	    	Expression.parse("!");
+	    }
+	    
+	    @Test(expected=IllegalArgumentException.class)
+	    public void Parse_EmptyInput_ThrowsIllegalArgumentException(){
+	    	Expression.parse("");
+	    }
+	    
+	    @Test(expected=IllegalArgumentException.class)
+	    public void Parse_NullInput_ThrowsIllegalArgumentException(){
+	    	Expression.parse(null);
+	    }
+	    
+	    @Test
+	    public void Parse_TwoEquivalentExpressions_ReturnsEqualASTs(){
+	    	Expression sut1 = Expression.parse("5+5*5");
+	    	Expression sut2 = Expression.parse("((5.000)     + ((5.0) *    5.00000))    ");
+	    			
+	    	boolean result = sut1.equals(sut2);
+	    	
+	    	assertTrue(result);
+	    }
+	    
+	    @Test
+	    public void Parse_SingleFloatExpression_ReturnsCorrectExpression(){
+	    	Expression sut = Expression.parse("1.0");
+	    	
+	    	assertEquals("1.0000", sut.toString());
+	    }
     }
-    
-    @Test(expected=IllegalArgumentException.class)
-    public void Parse_EmptyInput_ThrowsIllegalArgumentException(){
-    	Expression.parse("");
-    }
-    
-    @Test(expected=IllegalArgumentException.class)
-    public void Parse_NullInput_ThrowsIllegalArgumentException(){
-    	Expression.parse(null);
-    }
-    
-    @Test
-    public void Parse_TwoEquivalentExpressions_ReturnsEqualASTs(){
-    	Expression sut1 = Expression.parse("5+5*5");
-    	Expression sut2 = Expression.parse("((5.000)     + ((5.0) *    5.00000))    ");
-    			
-    	boolean result = sut1.equals(sut2);
-    	
-    	assertTrue(result);
-    }
-    
-    @Test
-    public void Parse_SingleFloatExpression_ReturnsCorrectExpression(){
-    	Expression sut = Expression.parse("1.0");
-    	
-    	assertEquals("1.0000", sut.toString());
-    }
-
 	/**
 	 * Traverse a parse tree, indenting to make it easier to read.
 	 * @param node

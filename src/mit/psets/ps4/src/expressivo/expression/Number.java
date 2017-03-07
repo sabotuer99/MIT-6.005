@@ -50,12 +50,8 @@ public class Number implements Expression {
 
 			@Override
 			public String getSymbolicValue() {
-				return Double.toString(value);
+				return String.format( "%.4f", value );
 			}
-
-			@Override
-			public String evaluate() {
-				return Double.toString(value);
-			}};
+		};
 	}
 }
