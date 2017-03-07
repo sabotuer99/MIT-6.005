@@ -5,9 +5,16 @@ package expressivo;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.IOException;
+
 import expressivo.expression.Addition;
 import expressivo.expression.Number;
 import expressivo.expression.Variable;
+import lib6005.parser.GrammarCompiler;
+import lib6005.parser.ParseTree;
+import lib6005.parser.Parser;
+import lib6005.parser.UnableToParseException;
 
 import org.junit.Test;
 
@@ -58,4 +65,46 @@ public class ExpressionTest {
     	assertEquals("x+x", result);
     }
     
+    @Test
+    public void parseSanityCheck() throws Exception{
+    	
+    	Parser<ExpressionGrammar> parser =
+			     GrammarCompiler.compile(new File(getPath(), 
+			    		 "Expression.g"), ExpressionGrammar.ROOT); 
+    	
+    	ParseTree<ExpressionGrammar> tree = parser.parse("5+5*5");
+    	
+    	visitAll(tree, "  ");
+    	
+        tree = parser.parse("5*5+5");
+    	
+    	visitAll(tree, "  ");
+    	
+    	tree = parser.parse("5*(X+5)");
+    	
+    	visitAll(tree, "  ");
+    }
+    
+	/**
+	 * Traverse a parse tree, indenting to make it easier to read.
+	 * @param node
+	 * Parse tree to print.
+	 * @param indent
+	 * Indentation to use.
+	 */
+	private static void visitAll(ParseTree<ExpressionGrammar> node, String indent){
+	    if(node.isTerminal()){
+	        System.out.println(indent + node.getName() + ":" + node.getContents());
+	    }else{
+	        System.out.println(indent + node.getName());
+	        for(ParseTree<ExpressionGrammar> child: node){
+	            visitAll(child, indent + "   ");
+	        }
+	    }
+	}
+	
+	private static String getPath(){
+		return "src/" + 
+				Main.class.getPackage().getName().replaceAll("\\.","/");
+	}
 }

@@ -1,8 +1,11 @@
 package expressivo;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
-import expressivo.expression.ExpressionEvaluator;
+import expressivo.expression.*;
+import expressivo.expression.Number;
 import lib6005.parser.*;
 
 /**
@@ -28,8 +31,131 @@ public interface Expression {
      * @throws IllegalArgumentException if the expression is invalid
      */
     public static Expression parse(String input) {
-        throw new RuntimeException("unimplemented");
+		
+		String path = "src/" + Expression.class.getPackage().getName().replaceAll("\\.","/");
+		
+		Parser<ExpressionGrammar> parser;
+
+			try {
+				parser = GrammarCompiler.compile(new File(path, 
+						 "Expression.g"), ExpressionGrammar.ROOT);
+				
+				ParseTree<ExpressionGrammar> tree = parser.parse(input);
+				
+				
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		
+			
+			
+		return null;
+	}
+
+	/**
+     * Function converts a ParseTree to an IntegerExpression. 
+     * @param p
+     *  ParseTree<IntegerGrammar> that is assumed to have been constructed by the grammar in IntegerExpression.g
+     * @return
+     */
+    static Expression buildAST(ParseTree<ExpressionGrammar> p){
+
+        switch(p.getName()){
+        /*
+         * Since p is a ParseTree parameterized by the type IntegerGrammar, p.getName() 
+         * returns an instance of the IntegerGrammar enum. This allows the compiler to check
+         * that we have covered all the cases.
+         */
+        case NUMBER:
+            /*
+             * A number will be a terminal containing a number.
+             */
+            return new Number(Integer.parseInt(p.getContents()));
+        case PRIMITIVE:
+            /*
+             * A primitive will have either a number or a sum as child (in addition to some whitespace)
+             * By checking which one, we can determine which case we are in.
+             */             
+
+            if(p.childrenByName(ExpressionGrammar.NUMBER).isEmpty()){
+                return buildAST(p.childrenByName(ExpressionGrammar.ADDITION).get(0));
+            }else{
+                return buildAST(p.childrenByName(ExpressionGrammar.NUMBER).get(0));
+            }
+
+        case ADDITION:
+        {
+            /*
+             * A sum will have one or more children that need to be summed together.
+             * Note that we only care about the children that are primitive. There may also be 
+             * some whitespace children which we want to ignore.
+             */
+            boolean first = true;
+            Expression result = null;
+            
+            for(ParseTree<ExpressionGrammar> child : p.childrenByName(ExpressionGrammar.PRIMITIVE)){                
+                if(first){
+                    result = buildAST(child);
+                    first = false;
+                }else{
+                    result = new Addition(result, buildAST(child));
+                }
+            }
+            if (first) {
+                throw new RuntimeException("sum must have a non whitespace child:" + p);
+            }
+            return result;
+        }
+        case ROOT:
+            /*
+             * The root has a single sum child, in addition to having potentially some whitespace.
+             */
+            return buildAST(p.childrenByName(ExpressionGrammar.PRIMITIVE).get(0));
+		case MULTIPLICATION:
+		{
+            boolean first = true;
+            Expression result = null;
+            
+            for(ParseTree<ExpressionGrammar> child : p.childrenByName(ExpressionGrammar.PRIMITIVE)){                
+                if(first){
+                    result = buildAST(child);
+                    first = false;
+                }else{
+                    result = new Multiplication(result, buildAST(child));
+                }
+            }
+            if (first) {
+                throw new RuntimeException("multiply must have a non whitespace child:" + p);
+            }
+            return result;
+		}
+		case VARIABLE:
+			return new Variable(p.getContents());
+			
+        case WHITESPACE:
+            /*
+             * Since we are always avoiding calling buildAST with whitespace, 
+             * the code should never make it here. 
+             */
+            throw new RuntimeException("You should never reach here:" + p);
+		case DIVISION:
+			break;
+		case SUBTRACTION:
+			break;
+//		case TERM:
+//			break;
+		default:
+			break;
+        }   
+        /*
+         * The compiler should be smart enough to tell that this code is unreachable, but it isn't.
+         */
+        throw new RuntimeException("You should never reach here:" + p);
     }
+    
+    
     
     /**
      * @return a parsable representation of this expression, such that

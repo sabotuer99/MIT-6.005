@@ -9,21 +9,23 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception{
 		Parser<IntegerGrammar> parser =
-			     GrammarCompiler.compile(new File(getPath(), "IntegerExpression.g"), IntegerGrammar.ROOT); //ParseExample.class.getResourceAsStream(
+			     GrammarCompiler.compile(new File(getPath(), 
+			    		 "IntegerExpression.g"), IntegerGrammar.ROOT); 
 		
 		ParseTree<IntegerGrammar> tree = parser.parse("5+2+3+21");
 		
 		System.out.println(tree.toString());
 		
 		//Display a graph of the tree in a web browser
-		//tree.display();
+		tree.display();
 		
 		System.out.println("\n\nIndented representation of tree:");
 		visitAll(tree, "  ");
 	}
 	
 	private static String getPath(){
-		return "src/" + Main.class.getPackage().getName().replaceAll("\\.","/");
+		return "src/" + 
+				Main.class.getPackage().getName().replaceAll("\\.","/");
 	}
 	
 	/**
