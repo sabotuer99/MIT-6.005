@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.Arrays;
 
 import expressivo.expression.Addition;
+import expressivo.expression.Multiplication;
 import expressivo.expression.Number;
 import expressivo.expression.Variable;
 import lib6005.parser.GrammarCompiler;
@@ -42,7 +43,58 @@ public class ExpressionTest {
     	
     	assertEquals("(1.0000+2.0000)", result);
     }
+    
+    @Test
+    public void Addition_TwoEquivilentExpressions_EqualsReturnsTrue(){
+    	Expression a = new Number(1);
+    	Expression b = new Number(2);
+    	Expression test = new Addition(Arrays.asList(a,b));
+    	
+    	Expression c = new Number(1);
+    	Expression d = new Number(2);
+    	Expression sut = new Addition(Arrays.asList(c,d));
+    	
+    	boolean result = sut.equals(test);
+    	
+    	assertTrue(result);
+    }
+    
+    @Test
+    public void Multiplication_TwoEquivilentExpressions_EqualsReturnsTrue(){
+    	Expression a = new Number(1);
+    	Expression b = new Number(2);
+    	Expression test = new Multiplication(Arrays.asList(a,b));
+    	
+    	Expression c = new Number(1);
+    	Expression d = new Number(2);
+    	Expression sut = new Multiplication(Arrays.asList(c,d));
+    	
+    	boolean result = sut.equals(test);
+    	
+    	assertTrue(result);
+    }
 
+    @Test
+    public void Variable_TwoEquivilentExpressions_EqualsReturnsTrue(){
+
+    	Expression test = new Variable("A");
+    	Expression sut = new Variable("A");
+    	
+    	boolean result = sut.equals(test);
+    	
+    	assertTrue(result);
+    }
+    
+    @Test
+    public void Number_TwoEquivilentExpressions_EqualsReturnsTrue(){
+
+    	Expression test = new Number(1);
+    	Expression sut = new Number(1);
+    	
+    	boolean result = sut.equals(test);
+    	
+    	assertTrue(result);
+    }
     
     @Test
     public void parseSanityCheck() throws Exception{
