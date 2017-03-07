@@ -6,7 +6,7 @@ package expressivo;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
 
 import expressivo.expression.Addition;
 import expressivo.expression.Number;
@@ -14,7 +14,6 @@ import expressivo.expression.Variable;
 import lib6005.parser.GrammarCompiler;
 import lib6005.parser.ParseTree;
 import lib6005.parser.Parser;
-import lib6005.parser.UnableToParseException;
 
 import org.junit.Test;
 
@@ -37,33 +36,13 @@ public class ExpressionTest {
     public void Addition_TwoNumberSubExpressions_evaluateReturnsSum(){
     	Expression a = new Number(1);
     	Expression b = new Number(2);
-    	Expression sut = new Addition(a, b);
+    	Expression sut = new Addition(Arrays.asList(a,b));
     	
-    	String result = sut.getEvaluator(null).evaluate();
+    	String result = sut.toString();
     	
-    	assertEquals("3.0", result);
+    	assertEquals("(1.0000+2.0000)", result);
     }
-    
-    @Test
-    public void Addition_NumberAndVariable_evaluateReturnsSum(){
-    	Expression a = new Number(1);
-    	Expression b = new Variable("x");
-    	Expression sut = new Addition(a, b);
-    	
-    	String result = sut.getEvaluator(null).evaluate();
-    	
-    	assertEquals("1.0+x", result);
-    }
-    
-    @Test
-    public void Addition_TwoVariable_evaluateReturnsSum(){
-    	Expression b = new Variable("x");
-    	Expression sut = new Addition(b, b);
-    	
-    	String result = sut.getEvaluator(null).evaluate();
-    	
-    	assertEquals("x+x", result);
-    }
+
     
     @Test
     public void parseSanityCheck() throws Exception{
@@ -81,6 +60,22 @@ public class ExpressionTest {
     	visitAll(tree, "  ");
     	
     	tree = parser.parse("5*(X+5)");
+    	
+    	visitAll(tree, "  ");
+    	
+    	tree = parser.parse("5");
+    	
+    	visitAll(tree, "  ");
+    	
+    	tree = parser.parse("(5) + (5)");
+    	
+    	visitAll(tree, "  ");
+    	
+    	tree = parser.parse("((5) + (5))");
+    	
+    	visitAll(tree, "  ");
+    	
+    	tree = parser.parse("5*5*5*5*5*5");
     	
     	visitAll(tree, "  ");
     }

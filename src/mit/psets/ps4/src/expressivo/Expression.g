@@ -18,7 +18,7 @@
 
 @skip whitespace{
     root ::= expression;
-	expression ::= (addition | subtraction);
+	expression ::= (primitive | addition | subtraction);
 	
 	addition ::= (primitive | multiplication | division) ("+" (primitive | multiplication | division))*;
 	subtraction ::= (primitive | multiplication | division) ("-" (primitive | multiplication | division))*;

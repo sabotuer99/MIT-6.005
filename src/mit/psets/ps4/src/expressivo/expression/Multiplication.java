@@ -1,5 +1,7 @@
 package expressivo.expression;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 import expressivo.Expression;
@@ -7,17 +9,21 @@ import expressivo.ExpressionVisitor;
 
 public class Multiplication implements Expression {
 
-	private Expression left;
-	private Expression right;
+	private List<Expression> terms = new ArrayList<>();
 	
-	public Multiplication(Expression left, Expression right){
-		this.left = left;
-		this.right = right;
+	public Multiplication(List<Expression> terms){
+		this.terms = new ArrayList<>(terms);
 	}
 	
 	@Override
 	public String toString(){
-		return "(" + left.toString() + "*" + right.toString() + ")";
+		String s = "(";
+		for(Expression term : terms){
+			s += term.toString() + "*";
+		}
+		s = s.substring(0, s.length() - 1);
+		s += ")";
+		return s;
 	}
 	
 	@Override
@@ -39,11 +45,11 @@ public class Multiplication implements Expression {
 	public ExpressionEvaluator getEvaluator(final Map<String,Double> environment) {
 		
 		return new ExpressionEvaluator(){
-			
-			String rightSymbol = right.getEvaluator(environment).getSymbolicValue();
-			String leftSymbol = left.getEvaluator(environment).getSymbolicValue();
-			Maybe<Double> rightValue = right.getEvaluator(environment).getNumericValue();
-			Maybe<Double> leftValue = left.getEvaluator(environment).getNumericValue();
+			//TODO: fix this shit
+			String rightSymbol = null; //right.getEvaluator(environment).getSymbolicValue();
+			String leftSymbol = null; // left.getEvaluator(environment).getSymbolicValue();
+			Maybe<Double> rightValue = null; // right.getEvaluator(environment).getNumericValue();
+			Maybe<Double> leftValue = null; // left.getEvaluator(environment).getNumericValue();
 
 
 			@Override

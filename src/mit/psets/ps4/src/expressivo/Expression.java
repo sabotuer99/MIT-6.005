@@ -63,89 +63,41 @@ public interface Expression {
     static Expression buildAST(ParseTree<ExpressionGrammar> p){
 
         switch(p.getName()){
-        /*
-         * Since p is a ParseTree parameterized by the type IntegerGrammar, p.getName() 
-         * returns an instance of the IntegerGrammar enum. This allows the compiler to check
-         * that we have covered all the cases.
-         */
-        case NUMBER:
-            /*
-             * A number will be a terminal containing a number.
-             */
-            return new Number(Integer.parseInt(p.getContents()));
-        case PRIMITIVE:
-            /*
-             * A primitive will have either a number or a sum as child (in addition to some whitespace)
-             * By checking which one, we can determine which case we are in.
-             */             
 
-            if(p.childrenByName(ExpressionGrammar.NUMBER).isEmpty()){
-                return buildAST(p.childrenByName(ExpressionGrammar.ADDITION).get(0));
-            }else{
-                return buildAST(p.childrenByName(ExpressionGrammar.NUMBER).get(0));
-            }
+        case ROOT:
+        case EXPRESSION:	
 
         case ADDITION:
-        {
-            /*
-             * A sum will have one or more children that need to be summed together.
-             * Note that we only care about the children that are primitive. There may also be 
-             * some whitespace children which we want to ignore.
-             */
-            boolean first = true;
-            Expression result = null;
-            
-            for(ParseTree<ExpressionGrammar> child : p.childrenByName(ExpressionGrammar.PRIMITIVE)){                
-                if(first){
-                    result = buildAST(child);
-                    first = false;
-                }else{
-                    result = new Addition(result, buildAST(child));
-                }
-            }
-            if (first) {
-                throw new RuntimeException("sum must have a non whitespace child:" + p);
-            }
-            return result;
-        }
-        case ROOT:
-            /*
-             * The root has a single sum child, in addition to having potentially some whitespace.
-             */
-            return buildAST(p.childrenByName(ExpressionGrammar.PRIMITIVE).get(0));
+        case SUBTRACTION:       
+
 		case MULTIPLICATION:
-		{
-            boolean first = true;
-            Expression result = null;
-            
-            for(ParseTree<ExpressionGrammar> child : p.childrenByName(ExpressionGrammar.PRIMITIVE)){                
-                if(first){
-                    result = buildAST(child);
-                    first = false;
-                }else{
-                    result = new Multiplication(result, buildAST(child));
-                }
-            }
-            if (first) {
-                throw new RuntimeException("multiply must have a non whitespace child:" + p);
-            }
-            return result;
-		}
-		case VARIABLE:
-			return new Variable(p.getContents());
-			
-        case WHITESPACE:
+		case DIVISION:
+		
+
+        case WHITESPACE: {
             /*
              * Since we are always avoiding calling buildAST with whitespace, 
              * the code should never make it here. 
              */
             throw new RuntimeException("You should never reach here:" + p);
-		case DIVISION:
-			break;
-		case SUBTRACTION:
-			break;
-//		case TERM:
-//			break;
+        }
+		
+		
+		
+			
+        case PRIMITIVE: {
+        	// A primitive can only have one child, so just return 
+        	// the AST of that child
+        	return buildAST(p.children().get(0));
+        }
+        case NUMBER:{
+        	// A number is always a single literal, build and return
+            return new Number(Integer.parseInt(p.getContents()));
+        }
+        case VARIABLE:{
+        	// A variable is always a single literal, build and return
+        	return new Variable(p.getContents());
+        }
 		default:
 			break;
         }   

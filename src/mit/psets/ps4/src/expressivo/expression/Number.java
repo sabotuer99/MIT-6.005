@@ -20,7 +20,7 @@ public class Number implements Expression {
 
 	@Override
 	public String toString(){
-		return Double.toString(value);
+		return String.format( "%.4f", value );
 	}
 
 	@Override
