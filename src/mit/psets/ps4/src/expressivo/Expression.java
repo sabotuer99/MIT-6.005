@@ -1,5 +1,8 @@
 package expressivo;
 
+import java.util.Map;
+
+import expressivo.expression.ExpressionEvaluator;
 import lib6005.parser.*;
 
 /**
@@ -52,6 +55,8 @@ public interface Expression {
     public int hashCode();
     
     // TODO more instance methods
+    public void visit(ExpressionVisitor visitor);
+    public ExpressionEvaluator getEvaluator(Map<String, Double> environment);
     
     /* Copyright (c) 2015-2017 MIT 6.005 course staff, all rights reserved.
      * Redistribution of original or derived work requires permission of course staff.
