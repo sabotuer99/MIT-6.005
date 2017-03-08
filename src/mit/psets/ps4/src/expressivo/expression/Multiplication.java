@@ -59,37 +59,58 @@ public class Multiplication implements Expression {
 		
 		return new ExpressionEvaluator(){
 			//TODO: fix this shit
-			String rightSymbol = null; //right.getEvaluator(environment).getSymbolicValue();
-			String leftSymbol = null; // left.getEvaluator(environment).getSymbolicValue();
-			Maybe<Double> rightValue = null; // right.getEvaluator(environment).getNumericValue();
-			Maybe<Double> leftValue = null; // left.getEvaluator(environment).getNumericValue();
+			List<String> symbols = new ArrayList<>(); //right.getEvaluator(environment).getSymbolicValue();
+			List<Double> values = new ArrayList<>(); // right.getEvaluator(environment).getNumericValue();
 
+			//static block
+			{
+				for(Expression term : terms){
+					Maybe<Double> val = term.getEvaluator(environment).getNumericValue();
+					if(val.getValue().size() == 1){
+						values.add(val.getValue().get(0));
+					} else {
+						symbols.add(term.getEvaluator(environment).getSymbolicValue());
+					}
+				}
+			}
 
 			@Override
 			public Maybe<Double> getNumericValue() {
-				Double value = null;
-				
-				for(Double left : leftValue.getValue()){
-					for(Double right : rightValue.getValue()){
-						value = left * right;
+				if(symbols.size() == 0){
+					Double prod = 1.0;
+					for(Double val : values){
+						prod *= val;
 					}
+					return new Maybe<Double>(prod); 
+				} else {
+					return new Maybe<Double>(null); 
 				}
 				
-				return new Maybe<Double>(value);
 			}
 
 			@Override
 			public String getSymbolicValue() {
-				String left = leftSymbol;
-				String right = rightSymbol;
-				for(Double maybeLeft : leftValue.getValue()){
-					left = maybeLeft.toString();
-				}
-				for(Double maybeRight : rightValue.getValue()){
-					right = maybeRight.toString();
+				Double constants = 1.0;
+				for(Double val : values){
+					constants *= val;
 				}
 				
-				return left + "*" + right;
+				String symb = "";
+				if(constants != 1){
+					symb += String.format( "%.4f", constants ) + "*";
+				} 
+				
+				for(String sub : symbols){
+					symb += sub + "*";
+				}
+				
+				symb = symb.substring(0, symb.length() - 1);
+				
+				if(symbols.size() == 0){
+					symb = "(" + symb + ")";
+				}
+
+				return symb;
 			}
 			
 		};

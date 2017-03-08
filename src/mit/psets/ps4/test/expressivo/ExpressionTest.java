@@ -46,7 +46,7 @@ public class ExpressionTest {
 	    	
 	    	String result = sut.getEvaluator(null).getSymbolicValue();
 	    	
-	    	assertEquals("(3.0000)", result);
+	    	assertEquals("3.0000", result);
 	    }
 	    
 	    @Test
@@ -86,7 +86,7 @@ public class ExpressionTest {
 	    	
 	    	String result = sut.getEvaluator(env).getSymbolicValue();
 	    	
-	    	assertEquals("(16.0000)", result);
+	    	assertEquals("16.0000", result);
 	    }
 	    
 	    

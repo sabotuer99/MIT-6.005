@@ -95,7 +95,7 @@ public class Addition implements Expression {
 					constants += val;
 				}
 				
-				String symb = "(";
+				String symb = "";
 				if(constants != 0){
 					symb += String.format( "%.4f", constants ) + "+";
 				} 
@@ -105,7 +105,10 @@ public class Addition implements Expression {
 				}
 				
 				symb = symb.substring(0, symb.length() - 1);
-				symb += ")";
+				
+				if(symbols.size() > 0){
+					symb = "(" + symb + ")";
+				}
 				
 				return symb;
 			}
