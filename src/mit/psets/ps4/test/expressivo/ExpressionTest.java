@@ -199,6 +199,16 @@ public class ExpressionTest {
 	    }
 	    
 	    @Test
+	    public void MultiplicationDerive_ThreeX_ReturnsExampleResult(){
+	    	Expression x = new Variable("x");
+	    	Expression sut = new Multiplication(Arrays.asList(x,x,x));
+	    	
+	    	Expression result = sut.derive("x");
+	    	
+	    	assertEquals("((x*(x+x))+(x*x))", result.getEvaluator(null).getSymbolicValue());
+	    }
+	    
+	    @Test
 	    public void MultiplicationEval_TwoNumbers_ReturnsOneNumber(){
 	    	Expression a = new Number(1);
 	    	Expression b = new Number(2);
