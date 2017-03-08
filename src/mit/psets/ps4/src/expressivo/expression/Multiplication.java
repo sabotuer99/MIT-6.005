@@ -107,19 +107,21 @@ public class Multiplication implements Expression {
 				for(Double val : values){
 					constants *= val;
 				}
-				
+				int pieces = 0;
 				String symb = "";
 				if(constants != 1){
 					symb += String.format( "%.4f", constants ) + "*";
+					pieces++;
 				} 
 				
 				for(String sub : symbols){
 					symb += sub + "*";
+					pieces++;
 				}
 				
 				symb = symb.substring(0, symb.length() - 1);
 				
-				if(symbols.size() > 0){
+				if(pieces > 1){
 					symb = "(" + symb + ")";
 				}
 

@@ -29,12 +29,12 @@ public class ExpressionTest {
 
     // Testing strategy
     //   TODO
-    
-    @Test(expected=AssertionError.class)
-    public void testAssertionsEnabled() {
-        assert false; // make sure assertions are enabled with VM argument: -ea
-    }
-    
+	public static class AssertionTest{
+	    @Test(expected=AssertionError.class)
+	    public void testAssertionsEnabled() {
+	        assert false; // make sure assertions are enabled with VM argument: -ea
+	    }
+	}
     
     // TODO tests for Expression
     public static class AdditionTest{
@@ -48,6 +48,17 @@ public class ExpressionTest {
 	    	Expression result = sut.derive("x");
 	    	
 	    	assertEquals(0.0, (double)result.getEvaluator(null).getNumericValue().getValue().get(0), 0);
+	    }
+	    
+	    @Test
+	    public void AdditionDerive_OneNumOneVar_ReturnsNumberOne(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Variable("x");
+	    	Expression sut = new Addition(Arrays.asList(a,b));
+	    	
+	    	Expression result = sut.derive("x");
+	    	
+	    	assertEquals(1.0, (double)result.getEvaluator(null).getNumericValue().getValue().get(0), 0);
 	    }
     	
     	
@@ -177,6 +188,17 @@ public class ExpressionTest {
 	    }
 	    
 	    @Test
+	    public void MultiplicationDerive_TwoVars_ReturnsExampleResult(){
+	    	Expression a = new Variable("y");
+	    	Expression b = new Variable("x");
+	    	Expression sut = new Multiplication(Arrays.asList(a,b));
+	    	
+	    	Expression result = sut.derive("x");
+	    	
+	    	assertEquals("y", result.getEvaluator(null).getSymbolicValue());
+	    }
+	    
+	    @Test
 	    public void MultiplicationEval_TwoNumbers_ReturnsOneNumber(){
 	    	Expression a = new Number(1);
 	    	Expression b = new Number(2);
@@ -195,7 +217,7 @@ public class ExpressionTest {
 	    	
 	    	String result = sut.getEvaluator(null).getSymbolicValue();
 	    	
-	    	assertEquals("(B)", result);
+	    	assertEquals("B", result);
 	    }
 	    
 	    @Test
