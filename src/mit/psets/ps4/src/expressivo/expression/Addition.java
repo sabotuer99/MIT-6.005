@@ -12,6 +12,7 @@ public class Addition implements Expression {
 	private List<Expression> terms = new ArrayList<>();
 	
 	public Addition(List<Expression> terms){
+		assert terms.size() >= 2;
 		this.terms = new ArrayList<>(terms);
 	}
 	
@@ -114,6 +115,26 @@ public class Addition implements Expression {
 			}
 			
 		};
+	}
+
+	@Override
+	public Expression derive(String wrt) {
+		
+		List<Expression> newTerms = new ArrayList<Expression>();
+		newTerms.add(terms.get(0).derive(wrt));
+		
+		if(terms.size() == 2){			
+			newTerms.add(terms.get(1).derive(wrt));
+		} else {
+			List<Expression> theRest = new ArrayList<Expression>();
+			for(int i = 1; i < terms.size(); i++){
+				theRest.add(terms.get(i));
+			}
+			Expression expRest = new Addition(theRest);
+			newTerms.add(expRest.derive(wrt));
+		}
+		
+		return new Addition(newTerms);		
 	}
 	
 	

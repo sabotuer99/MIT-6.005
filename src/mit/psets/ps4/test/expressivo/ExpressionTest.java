@@ -38,6 +38,19 @@ public class ExpressionTest {
     
     // TODO tests for Expression
     public static class AdditionTest{
+    	
+	    @Test
+	    public void AdditionDerive_TwoNumbers_ReturnsNumberZero(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Number(2);
+	    	Expression sut = new Addition(Arrays.asList(a,b));
+	    	
+	    	Expression result = sut.derive("x");
+	    	
+	    	assertEquals(0.0, (double)result.getEvaluator(null).getNumericValue().getValue().get(0), 0);
+	    }
+    	
+    	
 	    @Test
 	    public void AdditionEval_TwoNumbers_ReturnsOneNumber(){
 	    	Expression a = new Number(1);
@@ -151,7 +164,80 @@ public class ExpressionTest {
     
     
     public static class MultiplicationTest{
-    
+        
+	    @Test
+	    public void MultiplicationDerive_TwoNumbers_ReturnsNumberZero(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Number(2);
+	    	Expression sut = new Multiplication(Arrays.asList(a,b));
+	    	
+	    	Expression result = sut.derive("x");
+	    	
+	    	assertEquals(0.0, (double)result.getEvaluator(null).getNumericValue().getValue().get(0), 0);
+	    }
+	    
+	    @Test
+	    public void MultiplicationEval_TwoNumbers_ReturnsOneNumber(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Number(2);
+	    	Expression sut = new Multiplication(Arrays.asList(a,b));
+	    	
+	    	String result = sut.getEvaluator(null).getSymbolicValue();
+	    	
+	    	assertEquals("2.0000", result);
+	    }
+	    
+	    @Test
+	    public void MultiplicationEval_VarAndNumber1_ReturnsJustVar(){
+	    	Expression a = new Number(1);
+	    	Expression b = new Variable("B");
+	    	Expression sut = new Multiplication(Arrays.asList(a,b));
+	    	
+	    	String result = sut.getEvaluator(null).getSymbolicValue();
+	    	
+	    	assertEquals("(B)", result);
+	    }
+	    
+	    @Test
+	    public void MultiplicationEval_TwoVarsNullEnvironment_ReturnsSymbolic(){
+	    	Expression a = new Variable("A");
+	    	Expression b = new Variable("B");
+	    	Expression sut = new Multiplication(Arrays.asList(a,b));
+	    	
+	    	String result = sut.getEvaluator(null).getSymbolicValue();
+	    	
+	    	assertEquals("(A*B)", result);
+	    }
+	    
+	    @Test
+	    public void MultiplicationEval_TwoVarsOneAssigned_ReturnsPartialSymbolic(){
+	    	Expression a = new Variable("A");
+	    	Expression b = new Variable("B");
+	    	Expression sut = new Multiplication(Arrays.asList(a,b));
+	    	
+	    	Map<String,Double> env = new HashMap<>();
+	    	env.put("A", 5.0);
+	    	
+	    	String result = sut.getEvaluator(env).getSymbolicValue();
+	    	
+	    	assertEquals("(5.0000*B)", result);
+	    }
+	    
+	    @Test
+	    public void MultiplicationEval_TwoVarsBothAssigned_ReturnsSummedValue(){
+	    	Expression a = new Variable("A");
+	    	Expression b = new Variable("B");
+	    	Expression sut = new Multiplication(Arrays.asList(a,b));
+	    	
+	    	Map<String,Double> env = new HashMap<>();
+	    	env.put("A", 5.0);
+	    	env.put("B", 11.0);
+	    	
+	    	String result = sut.getEvaluator(env).getSymbolicValue();
+	    	
+	    	assertEquals("55.0000", result);
+	    }
+    	
 	    @Test
 	    public void Multiplication_TwoEquivilentExpressions_EqualsReturnsTrue(){
 	    	Expression a = new Number(1);
@@ -222,6 +308,24 @@ public class ExpressionTest {
 	    	
 	    	assertTrue(result);
 	    }
+	    
+	    @Test
+	    public void VariableDeriv_wrtThisVariable_ReturnsNumberOneExpression(){
+	    	Expression sut = new Variable("x");
+	    	
+	    	Expression result = sut.derive("x");
+	    	
+	    	assertEquals(1.0, (double)result.getEvaluator(null).getNumericValue().getValue().get(0), 0);
+	    }
+	    
+	    @Test
+	    public void VariableDeriv_wrtAnotherVariable_ReturnsNumberZeroExpression(){
+	    	Expression sut = new Variable("x");
+	    	
+	    	Expression result = sut.derive("y");
+	    	
+	    	assertEquals(0.0, (double)result.getEvaluator(null).getNumericValue().getValue().get(0), 0);
+	    }
     }
     
     public static class NumberTest{
@@ -245,6 +349,15 @@ public class ExpressionTest {
 	    	boolean result = sut.hashCode() != test.hashCode();
 	    	
 	    	assertTrue(result);
+	    }
+	    
+	    @Test
+	    public void NumberDeriv_ReturnsNumberZeroExpression(){
+	    	Expression sut = new Number(21);
+	    	
+	    	Expression result = sut.derive("x");
+	    	
+	    	assertEquals(0.0, (double)result.getEvaluator(null).getNumericValue().getValue().get(0), 0);
 	    }
     }
     

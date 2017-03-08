@@ -2,6 +2,7 @@ package expressivo.expression;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 import expressivo.Expression;
@@ -12,6 +13,7 @@ public class Multiplication implements Expression {
 	private List<Expression> terms = new ArrayList<>();
 	
 	public Multiplication(List<Expression> terms){
+		assert terms.size() >= 2;
 		this.terms = new ArrayList<>(terms);
 	}
 	
@@ -63,14 +65,25 @@ public class Multiplication implements Expression {
 			List<Double> values = new ArrayList<>(); // right.getEvaluator(environment).getNumericValue();
 
 			//static block
+			//if ANY term is zero, the whole expression is zero, byebye, seeya later
 			{
+				boolean hasZero = false;
 				for(Expression term : terms){
 					Maybe<Double> val = term.getEvaluator(environment).getNumericValue();
+					
 					if(val.getValue().size() == 1){
-						values.add(val.getValue().get(0));
+						double num = val.getValue().get(0);
+						values.add(num);
+						hasZero = hasZero || num == 0;
 					} else {
 						symbols.add(term.getEvaluator(environment).getSymbolicValue());
 					}
+				}
+				
+				if(hasZero){
+					symbols = new ArrayList<>(); //right.getEvaluator(environment).getSymbolicValue();
+					values = new ArrayList<>();
+					values.add(0.0);
 				}
 			}
 
@@ -106,7 +119,7 @@ public class Multiplication implements Expression {
 				
 				symb = symb.substring(0, symb.length() - 1);
 				
-				if(symbols.size() == 0){
+				if(symbols.size() > 0){
 					symb = "(" + symb + ")";
 				}
 
@@ -114,6 +127,33 @@ public class Multiplication implements Expression {
 			}
 			
 		};
+	}
+
+	@Override
+	public Expression derive(String wrt) {
+		
+		List<Expression> newTerms = new ArrayList<Expression>();
+		Expression u = terms.get(0);
+		Expression du = u.derive(wrt);
+		Expression v = null;
+		Expression dv = null;
+		
+		if(terms.size() == 2){			
+			v = terms.get(1);
+			dv = v.derive(wrt);
+		} else {
+			List<Expression> theRest = new ArrayList<Expression>();
+			for(int i = 1; i < terms.size(); i++){
+				theRest.add(terms.get(i));
+			}
+			v = new Multiplication(theRest);
+			dv = v.derive(wrt);
+		}
+		
+		Expression first = new Multiplication(Arrays.asList(u, dv));
+		Expression second = new Multiplication(Arrays.asList(du, v));
+		
+		return new Addition(Arrays.asList(first,second));		
 	}
 
 }

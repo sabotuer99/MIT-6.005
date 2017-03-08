@@ -54,4 +54,9 @@ public class Number implements Expression {
 			}
 		};
 	}
+
+	@Override
+	public Expression derive(String wrt) {
+		return new Number(0);
+	}
 }

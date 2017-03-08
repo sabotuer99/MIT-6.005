@@ -59,4 +59,13 @@ public class Variable implements Expression {
 		};
 	}
 
+	@Override
+	public Expression derive(String wrt) {
+		if(wrt.equals(name)){
+			return new Number(1);
+		} else {
+			return new Number(0);
+		}
+	}
+
 }
