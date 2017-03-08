@@ -8,6 +8,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.experimental.runners.Enclosed;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +21,10 @@ import expressivo.expression.Addition;
 import expressivo.expression.Multiplication;
 import expressivo.expression.Number;
 import expressivo.expression.Variable;
+import lib6005.parser.GrammarCompiler;
 import lib6005.parser.ParseTree;
+import lib6005.parser.Parser;
+import lib6005.parser.UnableToParseException;
 
 /**
  * Tests for the Expression abstract data type.
@@ -424,6 +429,24 @@ public class ExpressionTest {
 	    	Expression sut = Expression.parse("1.0");
 	    	
 	    	assertEquals("1.0000", sut.toString());
+	    }
+	    
+	    @Test
+	    public void Parse_sandbox() throws UnableToParseException, IOException{
+	    	
+			Parser<ExpressionGrammar> parser =
+				     GrammarCompiler.compile(new File(getPath(), 
+				    		 "Expression.g"), ExpressionGrammar.ROOT); 
+	    	
+	    	ParseTree<ExpressionGrammar> tree = parser.parse("5 + 2 * 3 + 21");
+			
+			System.out.println(tree.toString());
+			
+			//Display a graph of the tree in a web browser
+			tree.display();
+			
+			System.out.println("\n\nIndented representation of tree:");
+			visitAll(tree, "  ");
 	    }
     }
 	/**
