@@ -1,6 +1,9 @@
 package expressivo;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +40,7 @@ public interface Expression {
      * @throws IllegalArgumentException if the expression is invalid
      */
     public static Expression parse(String input) {
-		
+		//log(input);
 		String path = "src/" + Expression.class.getPackage().getName().replaceAll("\\.","/");
 		
 		Parser<ExpressionGrammar> parser;
@@ -58,6 +61,19 @@ public interface Expression {
 			} 
 	}
 
+    static void log(String input){
+    	
+    	try(FileWriter fw = new FileWriter("log.txt", true)){
+	    	try(BufferedWriter bw = new BufferedWriter(fw)) {
+	    		bw.write(input + "\n\n\n");
+				bw.close();
+			} 
+    	} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    
 	/**
      * Function converts a ParseTree to an IntegerExpression. 
      * @param p

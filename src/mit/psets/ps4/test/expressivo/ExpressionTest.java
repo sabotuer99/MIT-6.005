@@ -431,6 +431,13 @@ public class ExpressionTest {
 	    	assertEquals("1.0000", sut.toString());
 	    }
 	    
+//	    @Test
+//	    public void Parse_LeftNest_ParsesQuickly(){
+//	    	Expression.parse("(((((((a + b) * c) * d) + e) + f) * g) * x)");
+//	    	
+//	    	assertTrue(true);
+//	    }
+	    
 	    @Test
 	    public void Parse_sandbox() throws UnableToParseException, IOException{
 	    	
@@ -443,7 +450,7 @@ public class ExpressionTest {
 			System.out.println(tree.toString());
 			
 			//Display a graph of the tree in a web browser
-			tree.display();
+			//tree.display();
 			
 			System.out.println("\n\nIndented representation of tree:");
 			visitAll(tree, "  ");
