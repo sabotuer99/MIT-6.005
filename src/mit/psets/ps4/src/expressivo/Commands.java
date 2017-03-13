@@ -23,7 +23,8 @@ public class Commands {
     public static String differentiate(String expression, String variable) {
         Expression exp = Expression.parse(expression);
         Expression dx = exp.derive(variable);
-        return dx.getEvaluator(null).getSymbolicValue();
+        String symb = dx.getEvaluator(null).getSymbolicValue();
+        return "".equals(symb) ? "0" : symb;
     }
     
     /**
@@ -40,7 +41,8 @@ public class Commands {
      */
     public static String simplify(String expression, Map<String,Double> environment) {
         Expression exp = Expression.parse(expression);
-        return exp.getEvaluator(environment).getSymbolicValue();
+        String symb = exp.getEvaluator(environment).getSymbolicValue();
+        return "".equals(symb) ? "0" : symb;
     }
     
     /* Copyright (c) 2015-2017 MIT 6.005 course staff, all rights reserved.

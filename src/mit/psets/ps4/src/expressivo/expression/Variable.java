@@ -53,6 +53,9 @@ public class Variable implements Expression {
 
 			@Override
 			public String getSymbolicValue() {
+				if(environment != null && environment.containsKey(name)){
+					return environment.get(name).toString();
+				}
 				return name;
 			}
 
