@@ -18,10 +18,10 @@
 
 @skip whitespace{
     root ::= expression;
-	expression ::= (primitive | addition | subtraction);
+	expression ::= (primitive | addition);
 	
-	addition ::= (primitive | multiplication | division) ("+" (primitive | multiplication | division))*;
-	subtraction ::= (primitive | multiplication | division) ("-" (primitive | multiplication | division))*;
+	addition ::= multiplication ("+" multiplication)*;
+	subtraction ::= multiplication ("-" multiplication)*;
 	
 	multiplication ::= primitive ("*" primitive)*;
 	division ::= primitive ("/" primitive)*;
@@ -29,6 +29,6 @@
 	primitive ::= number | variable | '(' expression ')';
 }
 
-number ::= [0-9]+[.]?[0-9]*;
+number ::= ([0-9]*[.])?[0-9]+;
 variable ::= [A-Za-z]+;
 whitespace ::= [ ]+;

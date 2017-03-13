@@ -107,7 +107,9 @@ public class Addition implements Expression {
 					pieces++;
 				}
 				
-				symb = symb.substring(0, symb.length() - 1);
+				if(symb.length() > 0){
+					symb = symb.substring(0, symb.length() - 1);
+				}
 				
 				if(pieces > 1){
 					symb = "(" + symb + ")";
