@@ -10,7 +10,13 @@ public class HelpReqCommandFactory implements CommandFactory {
 	@Override
 	public Command buildCommand(ParseTree<CommandGrammar> tree) {
 		
-		return new HelpReqCommand();
+		return new HelpReqCommand("AVAILABLE COMMANDS:  "
+				                + "look, "
+				                + "dig x y, "
+				                + "flag x y, "
+				                + "deflag x y, "
+				                + "help, "
+				                + "bye");
 	}
 
 }
