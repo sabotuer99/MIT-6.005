@@ -7,7 +7,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import minesweeper.Board;
+import minesweeper.board.Board;
 
 /**
  * Multiplayer Minesweeper server.
