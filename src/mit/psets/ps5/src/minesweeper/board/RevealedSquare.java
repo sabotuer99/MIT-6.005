@@ -44,6 +44,7 @@ public class RevealedSquare extends EventfulAbstractBoardSquare{
 		return false;
 	}
 
+	@Override
 	public SquareEventHandler getBoomHandler() {
 		return boomHandler;
 	}

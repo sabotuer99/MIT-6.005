@@ -11,4 +11,6 @@ public interface BoardSquare {
 	boolean isBomb();
 	void addListener(Class<? extends SquareEvent> eventType, SquareEventHandler handler);
 	void removeListener(Class<? extends SquareEvent> eventType, SquareEventHandler handler);
+	public SquareEventHandler getBoomHandler();
+	public SquareEventHandler getRevealHandler();
 }
