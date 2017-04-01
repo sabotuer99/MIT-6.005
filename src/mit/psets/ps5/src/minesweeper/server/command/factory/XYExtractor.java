@@ -1,13 +1,13 @@
 package minesweeper.server.command.factory;
 
 import lib6005.parser.ParseTree;
-import minesweeper.BoardSize;
+import minesweeper.server.command.Point;
 import minesweeper.server.grammar.CommandGrammar;
 
 public class XYExtractor {
 
-	public static BoardSize extract(ParseTree<CommandGrammar> tree){
-		BoardSize coords = new BoardSize();
+	public static Point extract(ParseTree<CommandGrammar> tree){
+		Point coords = new Point();
 		
 		int x = 0;
 		for(ParseTree<CommandGrammar> X : tree.childrenByName(CommandGrammar.X)){
