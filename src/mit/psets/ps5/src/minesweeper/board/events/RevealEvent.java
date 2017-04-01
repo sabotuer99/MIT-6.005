@@ -13,4 +13,9 @@ public class RevealEvent implements SquareEvent{
 	public void incBombCount(){
 		revealed.incBombCount();
 	}
+	
+	public RevealedSquare getSquare(){
+		return revealed;
+	}
+	
 }

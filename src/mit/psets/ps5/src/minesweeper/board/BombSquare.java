@@ -27,10 +27,13 @@ public class BombSquare extends EventfulAbstractBoardSquare {
 		isBomb = false;
 		
 		//fire boom event on all handlers
+		//then remove this nodes listener
 		List<SquareEventHandler> b = handlerMap.get(BoomEvent.class);
 		if(b != null){
 			for(int i = b.size()-1; i >=0; i--){
-				b.get(i).handle(new BoomEvent());
+				SquareEventHandler bh = b.get(i);
+				bh.handle(new BoomEvent());
+				b.remove(bh);
 			}
 		}
 

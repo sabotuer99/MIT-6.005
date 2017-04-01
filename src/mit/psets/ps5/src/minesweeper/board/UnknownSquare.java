@@ -13,7 +13,7 @@ public class UnknownSquare extends AbstractBoardSquare {
 	
 	@Override
 	public BoardSquare flag() {
-		return new FlaggedSquare(base);
+		return new FlaggedSquare(this);
 	}
 
 	@Override
