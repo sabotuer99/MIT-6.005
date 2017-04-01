@@ -5,7 +5,8 @@ import minesweeper.board.events.SquareEventHandler;
 
 public class NoBombSquare extends EventfulAbstractBoardSquare{
 
-
+	private boolean hidden = true;
+	
 	@Override
 	public BoardSquare flag() {
 		return this;
@@ -20,9 +21,13 @@ public class NoBombSquare extends EventfulAbstractBoardSquare{
 	public BoardSquare dig() {
 		RevealedSquare rev = new RevealedSquare();
 
-		for(SquareEventHandler handler : handlerMap.get(RevealEvent.class)){
-			handler.handle(new RevealEvent(rev));
+		if(hidden){
+			hidden = false;
+			for(SquareEventHandler handler : handlerMap.get(RevealEvent.class)){
+				handler.handle(new RevealEvent(rev));
+			}
 		}
+
 		
 		return rev;
 	}

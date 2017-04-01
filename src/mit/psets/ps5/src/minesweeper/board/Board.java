@@ -3,6 +3,8 @@
  */
 package minesweeper.board;
 
+import java.util.Arrays;
+
 import minesweeper.board.events.RevealEvent;
 import minesweeper.board.events.SquareEvent;
 import minesweeper.board.events.SquareEventHandler;
@@ -26,22 +28,22 @@ public class Board {
 		rows = initialState.length;
 		cols = rows > 0 ? initialState[0].length : 0;
 		
-		squares = new BoardSquare[rows + 2][cols + 2];
+		squares = init(rows, cols);
 		
-		for(int row = 1; row < rows + 2; row++){
-			for(int col = 1; col < cols + 2; col++){
+		for(int row = 0; row < rows; row++){
+			for(int col = 0; col < cols; col++){
 				
 				BoardSquare base = initialState[row][col] == 0 ? 
 						new NoBombSquare() :
 						new BombSquare();
 
-				squares[row][col] = new UnknownSquare(base);
+				squares[row+1][col+1] = new UnknownSquare(base);
 			}
 		}
 		
 		//for each square on the active game board, add the reveal event handlers
-		for(int row = 1; row < rows + 2; row++){
-			for(int col = 1; col < cols + 2; col++){
+		for(int row = 1; row < rows + 1; row++){
+			for(int col = 1; col < cols + 1; col++){
 				
 				BoardSquare square = squares[row][col];
 				final int r = row;
@@ -50,17 +52,30 @@ public class Board {
 				square.addListener(RevealEvent.class, new SquareEventHandler(){
 					@Override
 					public void handle(SquareEvent event) {
-						if(event instanceof RevealEvent){							
-							//propogate event by calling dig on NoBomb squares
-							BoardSquare[] n = new BoardSquare[4];
-							n[0] = squares[r-1][c];
-							n[1] = squares[r+1][c];
-							n[2] = squares[r][c+1];
-							n[3] = squares[r][c-1];
-							for(BoardSquare neighbor : n){
-								if(!neighbor.isBomb()){
-									neighbor.removeListener(RevealEvent.class, square.getRevealHandler());
-									neighbor.dig();
+						if(event instanceof RevealEvent){	
+							
+							//only propogate if bombcount is zero
+							int bombCount = 0;
+							for(int i = -1; i <= 1; i++){
+								for(int j = -1; j <= 1; j++){
+									if(!(i == 0 && j == 0)){
+										bombCount += squares[r + i][c + j].isBomb() ? 1 : 0;
+									}
+								}
+							}
+							
+							if(bombCount == 0){
+								if(!squares[r-1][c].isBomb()){
+									squares[r-1][c] = squares[r-1][c].dig();
+								}
+								if(!squares[r+1][c].isBomb()){
+									squares[r+1][c] = squares[r+1][c].dig();
+								}
+								if(!squares[r][c-1].isBomb()){
+									squares[r][c-1] = squares[r][c-1].dig();
+								}
+								if(!squares[r][c+1].isBomb()){
+									squares[r][c+1] = squares[r][c+1].dig();
 								}
 							}
 						}
@@ -78,18 +93,29 @@ public class Board {
 			}
 		}//end big square loop... gross!!!!	
 	}
+
+	private BoardSquare[][] init(int rows, int cols) {
+		BoardSquare[][] board = new BoardSquare[rows + 2][cols + 2];
+		for(int row = 0; row < rows + 2; row++){
+			for(int col = 0; col < cols + 2; col++){
+				board[row][col] = new NullBoardSquare();
+			}
+		}
+		return board;
+	}
 	
 	@Override
 	public String toString() {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		for(int row = 1; row < rows + 2; row++){
-			for(int col = 1; col < cols + 2; col++){
+		for(int row = 1; row < rows + 1; row++){
+			for(int col = 1; col < cols + 1; col++){
 				
 				sb.append(squares[row][col]).append(" ");
 				
 			}
+			sb.setLength(sb.length() - 1); //trim trailing space
 			sb.append(String.format("%n"));
 		}
 		
@@ -97,20 +123,20 @@ public class Board {
 	}
 	
 	public void dig(int x, int y){
-		int row = y;
-		int col = x;
+		int row = y + 1;
+		int col = x + 1;
 		squares[row][col] = squares[row][col].dig();
 	}
 	
 	public void flag(int x, int y){
-		int row = y;
-		int col = x;
+		int row = y + 1;
+		int col = x + 1;
 		squares[row][col] = squares[row][col].flag();
 	}
 	
 	public void deflag(int x, int y){
-		int row = y;
-		int col = x;
+		int row = y + 1;
+		int col = x + 1;
 		squares[row][col] = squares[row][col].deflag();
 	}
 	

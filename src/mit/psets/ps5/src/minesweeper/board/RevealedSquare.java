@@ -8,7 +8,7 @@ public class RevealedSquare extends EventfulAbstractBoardSquare{
 
 	private int count = 0;
 	
-	private SquareEventHandler boomHandler = new SquareEventHandler(){
+	private final SquareEventHandler boomHandler = new SquareEventHandler(){
 		@Override
 		public void handle(SquareEvent event) {
 			if(event instanceof BoomEvent){

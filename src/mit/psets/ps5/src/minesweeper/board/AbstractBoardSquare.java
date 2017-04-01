@@ -24,27 +24,30 @@ public abstract class AbstractBoardSquare implements BoardSquare {
 		return "X";
 	}
 	
-	public SquareEventHandler getBoomHandler() {
-		return new SquareEventHandler(){
+	private final SquareEventHandler bHandler = new SquareEventHandler(){
 
-			@Override
-			public void handle(SquareEvent event) {
-				// No-op
-			}};
+		@Override
+		public void handle(SquareEvent event) {
+			// No-op
+		}};
+		
+	public SquareEventHandler getBoomHandler() {
+		return bHandler;
 	}
 	
-	public SquareEventHandler getRevealHandler() {
-		return new SquareEventHandler(){
+	private final SquareEventHandler rHandler = new SquareEventHandler(){
 
-			@Override
-			public void handle(SquareEvent event) {
-				if(event instanceof RevealEvent){
-					RevealEvent e = (RevealEvent)event;
-					if(isBomb()){
-						e.incBombCount();
-					}
+		@Override
+		public void handle(SquareEvent event) {
+			if(event instanceof RevealEvent){
+				RevealEvent e = (RevealEvent)event;
+				if(isBomb()){
+					e.incBombCount();
 				}
-			}};
+			}
+		}};
+	public SquareEventHandler getRevealHandler() {
+		return rHandler;
 	}
 	
 	
