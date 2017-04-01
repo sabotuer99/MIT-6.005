@@ -20,54 +20,5 @@ public class BoardTest {
     }
     
     // TODO: Tests
-    @Test
-    public void test1() {
-        assertTrue(true); // make sure assertions are enabled with VM argument: -ea
-    }
-    
-    @Test
-    public void test2() {
-        assertTrue(true); // make sure assertions are enabled with VM argument: -ea
-    }
-    
-    @Test
-    public void test3() {
-        assertTrue(true); // make sure assertions are enabled with VM argument: -ea
-    }
-    
-    @Test
-    public void test4() {
-        assertTrue(true); // make sure assertions are enabled with VM argument: -ea
-    }
-    
-    @Test
-    public void test5() {
-        assertTrue(true); // make sure assertions are enabled with VM argument: -ea
-    }
-    
-    @Test
-    public void test6() {
-        assertTrue(true); // make sure assertions are enabled with VM argument: -ea
-    }
-    
-    @Test
-    public void test7() {
-        assertTrue(true); // make sure assertions are enabled with VM argument: -ea
-    }
-    
-    @Test
-    public void test8() {
-        assertTrue(true); // make sure assertions are enabled with VM argument: -ea
-    }
-    
-    @Test
-    public void test9() {
-        assertTrue(true); // make sure assertions are enabled with VM argument: -ea
-    }
-    
-    @Test
-    public void test10() {
-        assertTrue(true); // make sure assertions are enabled with VM argument: -ea
-    }
     
 }
