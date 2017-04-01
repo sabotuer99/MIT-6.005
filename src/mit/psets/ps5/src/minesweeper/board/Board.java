@@ -62,17 +62,23 @@ public class Board {
 								}
 							}
 							
+							square.removeAllListeners();
+							
 							if(bombCount == 0){
 								if(!squares[r-1][c].isBomb()){
+									squares[r-1][c].removeListener(RevealEvent.class, square.getRevealHandler());
 									squares[r-1][c] = squares[r-1][c].dig();
 								}
 								if(!squares[r+1][c].isBomb()){
+									squares[r+1][c].removeListener(RevealEvent.class, square.getRevealHandler());
 									squares[r+1][c] = squares[r+1][c].dig();
 								}
 								if(!squares[r][c-1].isBomb()){
+									squares[r][c-1].removeListener(RevealEvent.class, square.getRevealHandler());
 									squares[r][c-1] = squares[r][c-1].dig();
 								}
 								if(!squares[r][c+1].isBomb()){
+									squares[r][c+1].removeListener(RevealEvent.class, square.getRevealHandler());
 									squares[r][c+1] = squares[r][c+1].dig();
 								}
 							}

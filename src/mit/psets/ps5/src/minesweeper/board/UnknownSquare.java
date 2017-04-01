@@ -45,4 +45,9 @@ public class UnknownSquare extends AbstractBoardSquare {
 	public void removeListener(Class<? extends SquareEvent> eventType, SquareEventHandler handler) {
 		base.removeListener(eventType, handler);	
 	}
+	
+	@Override
+	public void removeAllListeners() {
+		base.removeAllListeners();
+	}
 }

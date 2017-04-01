@@ -1,11 +1,16 @@
 package minesweeper.board;
 
+import java.util.List;
+
 import minesweeper.board.events.BoomEvent;
 import minesweeper.board.events.RevealEvent;
 import minesweeper.board.events.SquareEventHandler;
 
 public class BombSquare extends EventfulAbstractBoardSquare {
 
+	//after it explodes it's not a bomb anymore
+	private boolean isBomb = true;
+	
 	@Override
 	public BoardSquare flag() {
 		return this;
@@ -19,15 +24,24 @@ public class BombSquare extends EventfulAbstractBoardSquare {
 	@Override
 	public BoardSquare dig() {
 		
+		isBomb = false;
+		
 		//fire boom event on all handlers
-		for(SquareEventHandler handler : handlerMap.get(BoomEvent.class)){
-			handler.handle(new BoomEvent());
+		List<SquareEventHandler> b = handlerMap.get(BoomEvent.class);
+		if(b != null){
+			for(int i = b.size()-1; i >=0; i--){
+				b.get(i).handle(new BoomEvent());
+			}
 		}
 
 		RevealedSquare rev = new RevealedSquare();
 
-		for(SquareEventHandler handler : handlerMap.get(RevealEvent.class)){
-			handler.handle(new RevealEvent(rev));
+		//fire reveal event on all handlers
+		List<SquareEventHandler> h = handlerMap.get(RevealEvent.class);
+		if(h != null){
+			for(int i = h.size()-1; i >=0; i--){
+				h.get(i).handle(new RevealEvent(rev));
+			}
 		}
 		
 		return rev;
@@ -35,7 +49,7 @@ public class BombSquare extends EventfulAbstractBoardSquare {
 
 	@Override
 	public boolean isBomb() {
-		return true;
+		return isBomb;
 	}
 	
 }

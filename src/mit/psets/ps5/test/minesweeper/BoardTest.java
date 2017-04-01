@@ -68,4 +68,17 @@ public class BoardTest {
     	
     	assertEquals(String.format("- 1  %n1 1  %n     %n"),result);
     }
+    
+    @Test
+    public void toString_digBombSpace_LeavesEmptySpace(){
+    	int[][] small = {{1, 0, 0},
+    			         {0, 0, 0},
+    			         {0, 0, 0}};
+    	
+    	Board sut = new Board(small);
+    	sut.dig(0, 0);
+    	String result = sut.toString();
+    	
+    	assertEquals(String.format("     %n     %n     %n"),result);
+    }
 }

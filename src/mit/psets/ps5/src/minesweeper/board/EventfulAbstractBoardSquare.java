@@ -31,6 +31,15 @@ public abstract class EventfulAbstractBoardSquare extends AbstractBoardSquare {
 		handlerMap.put(eventType, handlers);
 	}
 	
+	@Override
+	public void removeAllListeners() {
+		for(List<SquareEventHandler> h : handlerMap.values()){
+			h.clear();
+		}
+		handlerMap.clear();
+	}
+	
+	
 	private List<SquareEventHandler> safeGet(Class<? extends SquareEvent> eventType) {
 		List<SquareEventHandler> handlers = handlerMap.containsKey(eventType) ?
 				handlerMap.get(eventType) :

@@ -35,4 +35,8 @@ public class NullBoardSquare extends AbstractBoardSquare {
 		
 	}
 
+	@Override
+	public void removeAllListeners() {
+	}
+
 }

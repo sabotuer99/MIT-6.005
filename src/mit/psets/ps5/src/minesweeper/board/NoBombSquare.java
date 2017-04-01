@@ -1,12 +1,12 @@
 package minesweeper.board;
 
+import java.util.List;
+
 import minesweeper.board.events.RevealEvent;
 import minesweeper.board.events.SquareEventHandler;
 
 public class NoBombSquare extends EventfulAbstractBoardSquare{
 
-	//this flag is necessary to avoid stack overflow when reveal event is propogated.
-	private boolean hidden = true;
 	
 	@Override
 	public BoardSquare flag() {
@@ -22,13 +22,10 @@ public class NoBombSquare extends EventfulAbstractBoardSquare{
 	public BoardSquare dig() {
 		RevealedSquare rev = new RevealedSquare();
 
-		if(hidden){
-			hidden = false;
-			for(SquareEventHandler handler : handlerMap.get(RevealEvent.class)){
-				handler.handle(new RevealEvent(rev));
-			}
+		List<SquareEventHandler> h = handlerMap.get(RevealEvent.class);
+		for(int i = h.size()-1; i >=0; i--){
+			h.get(i).handle(new RevealEvent(rev));
 		}
-
 		
 		return rev;
 	}
@@ -37,6 +34,5 @@ public class NoBombSquare extends EventfulAbstractBoardSquare{
 	public boolean isBomb() {
 		return false;
 	}
-
 
 }
