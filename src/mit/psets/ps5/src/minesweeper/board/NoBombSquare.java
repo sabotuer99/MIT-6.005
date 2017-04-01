@@ -5,6 +5,7 @@ import minesweeper.board.events.SquareEventHandler;
 
 public class NoBombSquare extends EventfulAbstractBoardSquare{
 
+	//this flag is necessary to avoid stack overflow when reveal event is propogated.
 	private boolean hidden = true;
 	
 	@Override

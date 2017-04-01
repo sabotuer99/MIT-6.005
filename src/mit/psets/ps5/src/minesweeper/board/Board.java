@@ -3,8 +3,6 @@
  */
 package minesweeper.board;
 
-import java.util.Arrays;
-
 import minesweeper.board.events.RevealEvent;
 import minesweeper.board.events.SquareEvent;
 import minesweeper.board.events.SquareEventHandler;
@@ -105,7 +103,7 @@ public class Board {
 	}
 	
 	@Override
-	public String toString() {
+	public synchronized String toString() {
 		
 		StringBuilder sb = new StringBuilder();
 		
@@ -122,19 +120,19 @@ public class Board {
 		return sb.toString();
 	}
 	
-	public void dig(int x, int y){
+	public synchronized void dig(int x, int y){
 		int row = y + 1;
 		int col = x + 1;
 		squares[row][col] = squares[row][col].dig();
 	}
 	
-	public void flag(int x, int y){
+	public synchronized void flag(int x, int y){
 		int row = y + 1;
 		int col = x + 1;
 		squares[row][col] = squares[row][col].flag();
 	}
 	
-	public void deflag(int x, int y){
+	public synchronized void deflag(int x, int y){
 		int row = y + 1;
 		int col = x + 1;
 		squares[row][col] = squares[row][col].deflag();
