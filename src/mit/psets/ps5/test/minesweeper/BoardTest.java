@@ -326,4 +326,52 @@ public class BoardTest {
     			                 + "- 5 3 5 -%n"
     			                 + "- - - - -%n"),result);
     }
+    
+    /*
+    
+    - - - - - - - - - -
+	- - - - - - - - - -
+	- - 1 1 1 - - - - -
+	- - 1     - - - - -
+	- - 2     1 - - - -
+	- - 3     1 2 - - -
+	- - 2       1 - - -
+	- 1 1       1 - - -
+	- 1     1 1 1 - - -
+	- 1     1 - - - - -
+    
+    */
+    @Test
+    public void toString_digBombAfterRevealPropgation_PropagateReveal(){
+    	int[][] small = {{0,0,0,0,0,0,0,0,0,0},
+    			         {0,0,0,1,0,0,1,0,0,0},
+    			         {0,0,0,0,0,0,0,0,0,0},
+    			         {0,0,0,0,0,0,0,0,0,0},
+    			         {0,1,0,0,0,0,1,0,0,0},
+    			         {0,1,0,0,0,0,0,0,0,0},
+    			         {0,1,0,0,0,0,0,1,0,0},
+    			         {0,0,0,0,0,0,0,0,0,0},
+    			         {0,0,0,0,0,0,0,0,0,0},
+    			         {1,0,0,0,0,1,0,0,0,0}};
+    	
+    	Board sut = new Board(small);
+    	sut.dig(3,3);
+    	sut.dig(5,4);
+    	String result = sut.toString();   	
+    	String expected = String.format( "- - - - - - - - - -%n"
+								    	+"- - - - - - - - - -%n"
+								    	+"- - 1 1 1 - - - - -%n"
+								    	+"- - 1     - - - - -%n"
+								    	+"- - 2     1 - - - -%n"
+								    	+"- - 3     1 2 - - -%n"
+								    	+"- - 2       1 - - -%n"
+								    	+"- 1 1       1 - - -%n"
+								    	+"- 1     1 1 1 - - -%n"
+								    	+"- 1     1 - - - - -%n");
+    	System.out.println(result);
+    	System.out.println(expected);
+    	assertEquals(expected,result);
+    	
+
+    }
 }
