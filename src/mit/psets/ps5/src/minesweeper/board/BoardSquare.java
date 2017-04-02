@@ -14,4 +14,5 @@ public interface BoardSquare {
 	public SquareEventHandler getBoomHandler();
 	public SquareEventHandler getRevealHandler();
 	void removeAllListeners();
+	void removeAllListenersForEventType(Class<? extends SquareEvent> eventType);
 }

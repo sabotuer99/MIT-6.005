@@ -80,6 +80,15 @@ public abstract class AbstractBoardSquare implements BoardSquare {
 		handlerMap.clear();
 	}
 	
+	@Override
+	public void removeAllListenersForEventType(Class<? extends SquareEvent> eventType) {
+		List<SquareEventHandler> h = handlerMap.get(eventType);
+		if(h != null){
+			h.clear();
+		}
+		handlerMap.remove(eventType);
+	}
+	
 	
 	private List<SquareEventHandler> safeGet(Class<? extends SquareEvent> eventType) {
 		List<SquareEventHandler> handlers = handlerMap.containsKey(eventType) ?

@@ -51,8 +51,16 @@ public class Board {
 		squares[row][col] = squares[row][col].dig();
 		boolean isPostBomb = squares[row][col].isBomb();
 		
+		revealedSquareBoomHandlers.add(
+				getRevealedBoomPropagationHandler(squares, squares[row][col], row, col));
+		
 		//if square was a bomb before, and isn't one now, it exploded
 		if(isPreBomb && !isPostBomb){
+			
+			for(SquareEventHandler handler : revealedSquareBoomHandlers){
+				handler.handle(new BoomEvent());
+			}
+			
 			return false;
 		} else {
 			return true;
@@ -72,7 +80,31 @@ public class Board {
 	}
 	
 	private final List<SquareEventHandler> revealedSquareBoomHandlers = new ArrayList<>();
-	
+	private SquareEventHandler getRevealedBoomPropagationHandler(BoardSquare[][] board, 
+			BoardSquare square, final int r, final int c) {
+		return new SquareEventHandler(){
+			@Override
+			public void handle(SquareEvent event) {
+				if(event instanceof BoomEvent){	
+					
+					System.out.println("Called boom propagation handler");
+					
+					//only propagate if bomb count is zero
+					if(countNeighboringBombs(r, c, board) == 0){
+						for(int i = -1; i <= 1; i++){
+							for(int j = -1; j <= 1; j++){
+								if(!(i == 0 && j == 0)){
+									board[r+i][c+j] = board[r+i][c+j].dig();
+								}
+							}
+						}
+					}
+				}
+			}
+
+			
+		};
+	}
 	
 	private void addInitialEventListeners(BoardSquare[][] board) {
 		//for each square on the active game board, add the reveal event handlers
