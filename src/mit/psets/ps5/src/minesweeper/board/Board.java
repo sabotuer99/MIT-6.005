@@ -84,7 +84,7 @@ public class Board {
 			public void handle(SquareEvent event) {
 				if(event instanceof BoomEvent){	
 					
-					System.out.println("Called boom propagation handler");
+					//System.out.println("Called boom propagation handler");
 					
 					//only propagate if bomb count is zero
 					if(countNeighboringBombs(r, c, board) == 0){
@@ -201,6 +201,48 @@ public class Board {
 				
 				sb.append(squares[row][col]).append(" ");
 				
+			}
+			sb.setLength(sb.length() - 1); //trim trailing space
+			sb.append(String.format("%n"));
+		}
+		
+		return sb.toString();
+	}
+	
+	
+	public synchronized String toDebugString() {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		String header1 = "      ";
+		String header2 = "      ";
+		String header3 = "      ";
+		String underline = "     ";
+		
+		for(int col = 1; col < cols + 1; col++){
+			int huns = col / 100;
+			int tens = (col - (huns*100))/10;
+			int ones = col % 10;
+			
+			
+			header1 += (huns == 0 ? " " : huns) + " ";
+			header2 += (tens == 0 ? " " : tens)  + " ";
+			header3 += ones  + " ";
+			underline += "--";
+		}
+		
+		sb.append(header1).append(String.format("%n"));
+		sb.append(header2).append(String.format("%n"));
+		sb.append(header3).append(String.format("%n"));
+		sb.append(underline).append(String.format("%n"));
+		
+		for(int row = 1; row < rows + 1; row++){
+			for(int col = 0; col < cols + 1; col++){
+				if(col == 0){
+					sb.append(String.format("% 4d", row)).append("| ");
+				} else {
+					sb.append(squares[row][col].isBomb() ? 1 : 0).append(" ");
+				}
 			}
 			sb.setLength(sb.length() - 1); //trim trailing space
 			sb.append(String.format("%n"));

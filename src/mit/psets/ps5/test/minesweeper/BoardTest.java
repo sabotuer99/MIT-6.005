@@ -375,4 +375,18 @@ public class BoardTest {
     	
 
     }
+    
+    @Test
+    public void toDebugString_hugeMap_doesntLookLikeShit(){
+    	int[][] random = new int[100][70];
+    	for(int row = 0; row < 100; row++){
+    		for(int col = 0; col < 70; col++){
+    			random[row][col] = Math.random() < 0.2 ? 1 : 0;
+    		}
+    	}
+    	
+    	Board sut = new Board(random);
+    	
+    	System.out.println(sut.toDebugString());
+    }
 }

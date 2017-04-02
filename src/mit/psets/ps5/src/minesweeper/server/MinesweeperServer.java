@@ -51,6 +51,18 @@ public class MinesweeperServer {
 	private final boolean debug;
 	private Board board;
 	private int N;
+	
+	private synchronized void incPlayers(){
+		N++;
+		
+		System.out.format("Player added! %s players currently connected%n", N);
+	}
+	
+	private synchronized void decPlayers(){
+		N--;
+		
+		System.out.format("Player left... boo :(  %s players currently connected%n", N);
+	}
 
 	// TODO: Abstraction function, rep invariant, rep exposure
 
@@ -87,9 +99,7 @@ public class MinesweeperServer {
 			// block until a client connects
 			final Socket socket = serverSocket.accept();
 
-			synchronized(this) {
-				N++;
-			}
+			incPlayers();
 			
 			new Thread(new Runnable() {
 
@@ -102,9 +112,7 @@ public class MinesweeperServer {
 						ioe.printStackTrace(); // but don't terminate serve()
 					} finally {
 						
-						synchronized(this) {
-							N--;
-						}
+						decPlayers();
 						
 						try {
 							socket.close();
@@ -325,6 +333,10 @@ public class MinesweeperServer {
 
 		MinesweeperServer server = new MinesweeperServer(port, debug);
 		server.setBoard(board);
+		
+		System.out.format("Starting Minesweeper server on port %s%nBoard size %s x %s, bomb locations:  %n", port, board.getX(), board.getY());
+		System.out.println(board.toDebugString());
+		
 		server.serve();
 	}
 
