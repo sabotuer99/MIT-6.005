@@ -327,6 +327,24 @@ public class BoardTest {
     			                 + "- - - - -%n"),result);
     }
     
+    
+    @Test
+    public void toString_digCavity_PropogatesAcrossDiagonals(){
+    	int[][] small = {{1, 0, 0, 0},
+    			         {0, 0, 0, 0},
+    			         {0, 0, 0, 0},
+    			         {0, 0, 0, 1}};
+    	
+    	Board sut = new Board(small);
+    	sut.dig(0,2);
+    	String result = sut.toString();
+    	
+    	assertEquals(String.format("- 1    %n"
+				    			 + "1 1    %n"
+				    			 + "    1 1%n"
+				    			 + "    1 -%n"),result);
+    }
+    
     /*
     
     - - - - - - - - - -
