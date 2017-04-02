@@ -3,11 +3,28 @@
  */
 package minesweeper.server;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.Queue;
 
+import lib6005.parser.ParseTree;
+import lib6005.parser.UnableToParseException;
 import minesweeper.board.Board;
+import minesweeper.server.command.Command;
+import minesweeper.server.command.CommandResult;
+import minesweeper.server.command.parser.CommandParserImpl;
+import minesweeper.server.command.resolver.CommandResolver;
+import minesweeper.server.command.resolver.CommandResolverImpl;
+import minesweeper.server.grammar.CommandGrammar;
 
 /**
  * Multiplayer Minesweeper server.
@@ -28,6 +45,7 @@ public class MinesweeperServer {
     private final ServerSocket serverSocket;
     /** True if the server should *not* disconnect a client after a BOOM message. */
     private final boolean debug;
+	private Board board;
 
     // TODO: Abstraction function, rep invariant, rep exposure
 
@@ -77,12 +95,40 @@ public class MinesweeperServer {
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
         try {
-            for (String line = in.readLine(); line != null; line = in.readLine()) {
-                String output = handleRequest(line);
-                if (output != null) {
-                    // TODO: Consider improving spec of handleRequest to avoid use of null
-                    out.println(output);
-                }
+        	boolean keepPlaying = true;
+        	
+        	//connection loop
+            for (String line = in.readLine(); keepPlaying; line = in.readLine()) {
+            	
+            	//stupid readLine() cuts off the terminators which breaks
+            	//the parser... fucking hell
+            	if(line != null){
+            		line += "\n";
+            	}
+            	
+            	
+            	ParseTree<CommandGrammar> tree;
+            	try {
+        			 tree = new CommandParserImpl().parse(line);
+        		} catch (UnableToParseException e) {
+        			out.println("Invalid Input");
+        			continue;
+        		}
+            	
+            	CommandResolver resolver = new CommandResolverImpl();
+            	Command command = resolver.resolve(tree);
+            	
+            	CommandResult result = command.exectute(board);
+            	
+            	if(debug){
+            		if(!result.getResponse().equals("BOOM!")){
+            			keepPlaying = result.keepPlaying();
+            		}
+            	} else {
+            		keepPlaying = result.keepPlaying();
+            	}
+            	out.println(result.getResponse());
+            	
             }
         } finally {
             out.close();
@@ -97,36 +143,39 @@ public class MinesweeperServer {
      * @return message to client, or null if none
      */
     private String handleRequest(String input) {
-        String regex = "(look)|(help)|(bye)|"
-                     + "(dig -?\\d+ -?\\d+)|(flag -?\\d+ -?\\d+)|(deflag -?\\d+ -?\\d+)";
-        if ( ! input.matches(regex)) {
-            // invalid input
-            // TODO Problem 5
-        }
-        String[] tokens = input.split(" ");
-        if (tokens[0].equals("look")) {
-            // 'look' request
-            // TODO Problem 5
-        } else if (tokens[0].equals("help")) {
-            // 'help' request
-            // TODO Problem 5
-        } else if (tokens[0].equals("bye")) {
-            // 'bye' request
-            // TODO Problem 5
-        } else {
-            int x = Integer.parseInt(tokens[1]);
-            int y = Integer.parseInt(tokens[2]);
-            if (tokens[0].equals("dig")) {
-                // 'dig x y' request
-                // TODO Problem 5
-            } else if (tokens[0].equals("flag")) {
-                // 'flag x y' request
-                // TODO Problem 5
-            } else if (tokens[0].equals("deflag")) {
-                // 'deflag x y' request
-                // TODO Problem 5
-            }
-        }
+    	
+    	
+    	
+//        String regex = "(look)|(help)|(bye)|"
+//                     + "(dig -?\\d+ -?\\d+)|(flag -?\\d+ -?\\d+)|(deflag -?\\d+ -?\\d+)";
+//        if ( ! input.matches(regex)) {
+//            // invalid input
+//            // TODO Problem 5
+//        }
+//        String[] tokens = input.split(" ");
+//        if (tokens[0].equals("look")) {
+//            // 'look' request
+//            // TODO Problem 5
+//        } else if (tokens[0].equals("help")) {
+//            // 'help' request
+//            // TODO Problem 5
+//        } else if (tokens[0].equals("bye")) {
+//            // 'bye' request
+//            // TODO Problem 5
+//        } else {
+//            int x = Integer.parseInt(tokens[1]);
+//            int y = Integer.parseInt(tokens[2]);
+//            if (tokens[0].equals("dig")) {
+//                // 'dig x y' request
+//                // TODO Problem 5
+//            } else if (tokens[0].equals("flag")) {
+//                // 'flag x y' request
+//                // TODO Problem 5
+//            } else if (tokens[0].equals("deflag")) {
+//                // 'deflag x y' request
+//                // TODO Problem 5
+//            }
+//        }
         // TODO: Should never get here, make sure to return in each of the cases above
         throw new UnsupportedOperationException();
     }
@@ -248,8 +297,22 @@ public class MinesweeperServer {
     public static void runMinesweeperServer(boolean debug, Optional<File> file, int sizeX, int sizeY, int port) throws IOException {
         
         // TODO: Continue implementation here in problem 4
-        
+    	int[][] small = {{0, 0, 0, 0, 0},
+				         {0, 0, 0, 0, 0},
+				         {1, 1, 1, 0, 0},
+				         {0, 0, 0, 0, 0},
+				         {0, 0, 0, 0, 0}};
+    	Board board = new Board(small);
+    	
+    	
         MinesweeperServer server = new MinesweeperServer(port, debug);
+        server.setBoard(board);
         server.serve();
     }
+
+	private void setBoard(Board board) {
+		this.board = board;
+	}
+    
+    
 }
