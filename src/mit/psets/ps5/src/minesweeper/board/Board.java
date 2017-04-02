@@ -51,9 +51,6 @@ public class Board {
 		squares[row][col] = squares[row][col].dig();
 		boolean isPostBomb = squares[row][col].isBomb();
 		
-		revealedSquareBoomHandlers.add(
-				getRevealedBoomPropagationHandler(squares, squares[row][col], row, col));
-		
 		//if square was a bomb before, and isn't one now, it exploded
 		if(isPreBomb && !isPostBomb){
 			
@@ -175,7 +172,20 @@ public class Board {
 			for(int j = -1; j <= 1; j++){
 				if(!(i == 0 && j == 0)){
 					board[r+i][c+j].removeListener(RevealEvent.class, square.getRevealHandler());
+					
+					BoardSquare before = board[r+i][c+j];
+					
 					board[r+i][c+j] = board[r+i][c+j].dig();
+					
+					BoardSquare after = board[r+i][c+j];
+					
+					//if digging the square change it, it was "revealed" and we
+					//need to add the boom listener so it will update any time 
+					//a bomb explodes
+					if(before != after){
+						revealedSquareBoomHandlers.add(
+								getRevealedBoomPropagationHandler(board, board[r+i][c+j], r+i, c+j));
+					}
 				}
 			}
 		}
