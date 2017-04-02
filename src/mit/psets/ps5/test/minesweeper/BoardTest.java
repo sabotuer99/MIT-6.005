@@ -347,7 +347,7 @@ public class BoardTest {
     			         {0,0,0,1,0,0,1,0,0,0},
     			         {0,0,0,0,0,0,0,0,0,0},
     			         {0,0,0,0,0,0,0,0,0,0},
-    			         {0,1,0,0,0,0,1,0,0,0},
+    			         {0,1,0,0,0,1,1,0,0,0},
     			         {0,1,0,0,0,0,0,0,0,0},
     			         {0,1,0,0,0,0,0,1,0,0},
     			         {0,0,0,0,0,0,0,0,0,0},
@@ -356,6 +356,7 @@ public class BoardTest {
     	
     	Board sut = new Board(small);
     	sut.dig(3,3);
+    	System.out.println(sut.toString());
     	sut.dig(5,4);
     	String result = sut.toString();   	
     	String expected = String.format( "- - - - - - - - - -%n"

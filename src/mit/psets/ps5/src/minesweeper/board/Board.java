@@ -21,7 +21,6 @@ public class Board {
 	private int rows;
 	private int cols; 
 	
-	
 	public Board(int[][] initialState){
 		
 		rows = initialState.length;
@@ -32,89 +31,12 @@ public class Board {
 		addInitialEventListeners(squares);
 	}
 
-	private void addInitialEventListeners(BoardSquare[][] board) {
-		//for each square on the active game board, add the reveal event handlers
-		for(int row = 1; row < rows + 1; row++){
-			for(int col = 1; col < cols + 1; col++){
-				
-				BoardSquare square = board[row][col];
-				final int r = row;
-				final int c = col;
-				
-				square.addListener(RevealEvent.class, new SquareEventHandler(){
-					@Override
-					public void handle(SquareEvent event) {
-						if(event instanceof RevealEvent){	
-
-							//square will be replaced, so kill all the listeners
-							square.removeAllListeners();
-							
-							//only propagate if bomb count is zero
-							if(countNeighboringBombs(r, c) == 0){
-								digNeighbors(square, r, c);
-							}
-							
-							//add boom listeners to neighboring bombs
-							addBoomListenerToBombNeighbors(r, c, event);
-						}
-					}
-
-					private int countNeighboringBombs(final int r, final int c) {
-						int bombCount = 0;
-						for(int i = -1; i <= 1; i++){
-							for(int j = -1; j <= 1; j++){
-								if(!(i == 0 && j == 0)){
-									bombCount += board[r + i][c + j].isBomb() ? 1 : 0;
-								}
-							}
-						}
-						return bombCount;
-					}
-					private void addBoomListenerToBombNeighbors(final int r, final int c, SquareEvent event) {
-						for(int i = -1; i <= 1; i++){
-							for(int j = -1; j <= 1; j++){
-								if(!(i == 0 && j == 0) && board[r + i][c + j].isBomb()){
-									board[r + i][c + j].addListener(BoomEvent.class, ((RevealEvent)event).getSquare().getBoomHandler());
-								}
-							}
-						}
-					}
-					private void digNeighbors(BoardSquare square, final int r, final int c) {
-						
-						for(int i = -1; i <= 1; i++){
-							for(int j = -1; j <= 1; j++){
-								if(!(i == 0 && j == 0)){
-									board[r+i][c+j].removeListener(RevealEvent.class, square.getRevealHandler());
-									board[r+i][c+j] = board[r+i][c+j].dig();
-								}
-							}
-						}
-					}
-				});
-				
-				//add default bomb counting handlers for all neighbors
-				addBombCountingHandlersToNeighbors(square, row, col, board);
-			}
-		}//end big square loop... gross!!!!	
+	public int getX() {
+		return cols;
 	}
 
-	
-	@Override
-	public synchronized String toString() {
-		
-		StringBuilder sb = new StringBuilder();
-		
-		for(int row = 1; row < rows + 1; row++){
-			for(int col = 1; col < cols + 1; col++){
-				
-				sb.append(squares[row][col]).append(" ");
-				
-			}
-			sb.setLength(sb.length() - 1); //trim trailing space
-			sb.append(String.format("%n"));
-		}
-		
-		return sb.toString();
+	public int getY() {
+		return rows;
 	}
 	
 	public synchronized boolean dig(int x, int y){
@@ -144,6 +66,94 @@ public class Board {
 		int row = y + 1;
 		int col = x + 1;
 		squares[row][col] = squares[row][col].deflag();
+	}
+	
+	private void addInitialEventListeners(BoardSquare[][] board) {
+		//for each square on the active game board, add the reveal event handlers
+		for(int row = 1; row < rows + 1; row++){
+			for(int col = 1; col < cols + 1; col++){
+				
+				BoardSquare square = board[row][col];
+				final int r = row;
+				final int c = col;
+				
+				square.addListener(RevealEvent.class, new SquareEventHandler(){
+					@Override
+					public void handle(SquareEvent event) {
+						if(event instanceof RevealEvent){	
+
+							//square will be replaced, so kill all the listeners
+							square.removeAllListeners();
+							
+							//only propagate if bomb count is zero
+							if(countNeighboringBombs(r, c, board) == 0){
+								digNeighbors(square, r, c, board);
+							}
+							
+							//add boom listeners to neighboring bombs
+							addBoomListenerToBombNeighbors(r, c, event, board);
+						}
+					}
+
+					
+				});
+				
+				//add default bomb counting handlers for all neighbors
+				addBombCountingHandlersToNeighbors(square, row, col, board);
+			}
+		}//end big square loop... gross!!!!	
+	}
+
+	private int countNeighboringBombs(final int r, final int c, BoardSquare[][] board) {
+		int bombCount = 0;
+		for(int i = -1; i <= 1; i++){
+			for(int j = -1; j <= 1; j++){
+				if(!(i == 0 && j == 0)){
+					bombCount += board[r + i][c + j].isBomb() ? 1 : 0;
+				}
+			}
+		}
+		return bombCount;
+	}
+	
+	private void addBoomListenerToBombNeighbors(final int r, final int c, SquareEvent event, BoardSquare[][] board) {
+		for(int i = -1; i <= 1; i++){
+			for(int j = -1; j <= 1; j++){
+				if(!(i == 0 && j == 0) && board[r + i][c + j].isBomb()){
+					board[r + i][c + j].addListener(BoomEvent.class, ((RevealEvent)event).getSquare().getBoomHandler());
+				}
+			}
+		}
+	}
+	
+	private void digNeighbors(BoardSquare square, final int r, final int c, BoardSquare[][] board) {
+		
+		for(int i = -1; i <= 1; i++){
+			for(int j = -1; j <= 1; j++){
+				if(!(i == 0 && j == 0)){
+					board[r+i][c+j].removeListener(RevealEvent.class, square.getRevealHandler());
+					board[r+i][c+j] = board[r+i][c+j].dig();
+				}
+			}
+		}
+	}
+	
+	@Override
+	public synchronized String toString() {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for(int row = 1; row < rows + 1; row++){
+			for(int col = 1; col < cols + 1; col++){
+				
+				sb.append(squares[row][col]).append(" ");
+				
+			}
+			sb.setLength(sb.length() - 1); //trim trailing space
+			sb.append(String.format("%n"));
+		}
+		
+		return sb.toString();
 	}
 	
 	private void addBombCountingHandlersToNeighbors(BoardSquare square, final int r, final int c, BoardSquare[][] board) {
@@ -179,12 +189,5 @@ public class Board {
 		return board;
 	}
 
-	public int getX() {
-		return cols;
-	}
-
-	public int getY() {
-		return rows;
-	}
 	
 }
