@@ -85,7 +85,6 @@ public class MinesweeperServer {
 				N++;
 			}
 			
-			
 			new Thread(new Runnable() {
 
 				@Override
