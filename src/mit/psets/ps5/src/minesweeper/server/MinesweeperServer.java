@@ -10,11 +10,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.Scanner;
 
 import lib6005.parser.ParseTree;
 import lib6005.parser.UnableToParseException;
@@ -77,9 +79,13 @@ public class MinesweeperServer {
 	 */
 	public void serve() throws IOException {
 
+		//System.out.println("Serve called... ");
+		//System.out.println(board.toString());
+		
+		
 		while (true) {
 			// block until a client connects
-			Socket socket = serverSocket.accept();
+			final Socket socket = serverSocket.accept();
 
 			synchronized(this) {
 				N++;
@@ -157,14 +163,10 @@ public class MinesweeperServer {
 
 				CommandResult result = command.exectute(board);
 
-				if (debug) {
-					if (!result.getResponse().equals("BOOM!")) {
-						keepPlaying = result.keepPlaying();
-					}
-				} else {
+				if (!debug || !result.getResponse().contains("BOOM!")) {
 					keepPlaying = result.keepPlaying();
 				}
-				out.println(result.getResponse());
+				out.println(result.getResponse().replaceAll("[\\r\\n]*$", ""));
 
 			}
 		} finally {
@@ -316,17 +318,67 @@ public class MinesweeperServer {
 			throws IOException {
 
 		// TODO: Continue implementation here in problem 4
-		int[][] small = { { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 1, 1, 1, 0, 0 }, { 0, 0, 0, 0, 0 },
-				{ 0, 0, 0, 0, 0 } };
-		Board board = new Board(small);
+		Board board = randomBoard(sizeX, sizeY);
+		if(file.isPresent()){
+			board = parseFile(file.get());
+		}
 
 		MinesweeperServer server = new MinesweeperServer(port, debug);
 		server.setBoard(board);
 		server.serve();
 	}
 
+	private static Board randomBoard(int cols, int rows) {
+		
+		if(cols <= 0 || rows <= 0){
+			return randomBoard(10,10);
+		}
+		
+		int[][] vals = new int[cols][rows];
+		for(int row = 0; row < rows; row++){
+			for(int col = 0; col < cols; col++){
+				double roll = Math.random();
+				if(roll < 0.2){
+					vals[row][col] = 1;
+				}
+			}
+		}
+		
+		return new Board(vals);
+	}
+
 	private void setBoard(Board board) {
 		this.board = board;
+	}
+	
+	private static Board parseFile(File file){
+		Board board = randomBoard(1,1);
+		try {
+			Scanner sc = new Scanner(Files.newBufferedReader(file.toPath()));
+
+			int cols = sc.nextInt();
+			int rows = sc.nextInt();
+			
+			int[][] vals = new int[rows][cols];
+			
+			for(int row = 0; row < rows; row++){
+				for(int col = 0; col < cols; col++){
+					vals[row][col] = sc.nextInt();
+				}
+			}
+			
+			board = new Board(vals);
+			
+			sc.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("Parsed the following board from file: " + file.getName());
+		System.out.println(board.toString());
+		
+		return board;
 	}
 
 }

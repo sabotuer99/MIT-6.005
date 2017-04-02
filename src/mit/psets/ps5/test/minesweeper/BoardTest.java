@@ -282,4 +282,27 @@ public class BoardTest {
     	
     	assertEquals(String.format("F - -%n- 1 -%n- - -%n"),result);
     }
+    
+    @Test
+    public void PublishTest_dig31_RightAnswer(){
+    	int[][] seven = {{0, 0, 0, 0, 0, 0, 0},
+    			         {0, 0, 0, 0, 1, 0, 0},
+    			         {0, 0, 0, 0, 0, 0, 0},
+    			         {0, 0, 0, 0, 0, 0, 0},
+    			         {0, 0, 0, 0, 0, 0, 0},
+    			         {0, 0, 0, 0, 0, 0, 0},
+    			         {1, 0, 0, 0, 0, 0, 0}};
+    	
+    	Board sut = new Board(seven);
+    	sut.dig(3,1);
+    	String result = sut.toString();
+    	
+    	assertEquals(String.format("- - - - - - -%n"
+    			                 + "- - - 1 - - -%n"
+    			                 + "- - - - - - -%n"
+    			                 + "- - - - - - -%n"
+    			                 + "- - - - - - -%n"
+    			                 + "- - - - - - -%n"
+    			                 + "- - - - - - -%n"),result);
+    }
 }
