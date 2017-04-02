@@ -185,5 +185,13 @@ public class Board {
 		}
 		return board;
 	}
+
+	public int getX() {
+		return cols;
+	}
+
+	public int getY() {
+		return rows;
+	}
 	
 }
