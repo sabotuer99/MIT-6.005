@@ -80,21 +80,14 @@ public class Board {
 						}
 					}
 					private void digNeighbors(BoardSquare square, final int r, final int c) {
-						if(!board[r-1][c].isBomb()){
-							board[r-1][c].removeListener(RevealEvent.class, square.getRevealHandler());
-							board[r-1][c] = board[r-1][c].dig();
-						}
-						if(!board[r+1][c].isBomb()){
-							board[r+1][c].removeListener(RevealEvent.class, square.getRevealHandler());
-							board[r+1][c] = board[r+1][c].dig();
-						}
-						if(!board[r][c-1].isBomb()){
-							board[r][c-1].removeListener(RevealEvent.class, square.getRevealHandler());
-							board[r][c-1] = board[r][c-1].dig();
-						}
-						if(!board[r][c+1].isBomb()){
-							board[r][c+1].removeListener(RevealEvent.class, square.getRevealHandler());
-							board[r][c+1] = board[r][c+1].dig();
+						
+						for(int i = -1; i <= 1; i++){
+							for(int j = -1; j <= 1; j++){
+								if(!(i == 0 && j == 0)){
+									board[r+i][c+j].removeListener(RevealEvent.class, square.getRevealHandler());
+									board[r+i][c+j] = board[r+i][c+j].dig();
+								}
+							}
 						}
 					}
 				});

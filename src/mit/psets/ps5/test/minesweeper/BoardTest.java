@@ -106,7 +106,9 @@ public class BoardTest {
     	sut.dig(2, 2);
     	String result = sut.toString();
     	
-    	assertEquals(String.format("2 - -%n- - 1%n- 1  %n"),result);
+    	assertEquals(String.format("2 - -%n"
+    			                 + "- 2 1%n"
+    			                 + "- 1  %n"),result);
     }
     
     @Test
@@ -304,5 +306,24 @@ public class BoardTest {
     			                 + "- - - - - - -%n"
     			                 + "- - - - - - -%n"
     			                 + "- - - - - - -%n"),result);
+    }
+    
+    @Test
+    public void toString_digCavity_PropogatesIntoCorners(){
+    	int[][] small = {{1, 1, 1, 1, 1},
+    			         {1, 0, 0, 0, 1},
+    			         {1, 0, 0, 0, 1},
+    			         {1, 0, 0, 0, 1},
+    			         {1, 1, 1, 1, 1}};
+    	
+    	Board sut = new Board(small);
+    	sut.dig(2,2);
+    	String result = sut.toString();
+    	
+    	assertEquals(String.format("- - - - -%n"
+    			                 + "- 5 3 5 -%n"
+    			                 + "- 3   3 -%n"
+    			                 + "- 5 3 5 -%n"
+    			                 + "- - - - -%n"),result);
     }
 }
