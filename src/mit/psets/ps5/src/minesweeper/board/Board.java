@@ -122,8 +122,8 @@ public class Board {
 		}//end big square loop... gross!!!!	
 	}
 
-	private SquareEventHandler getDigPropagationRevealHandler(BoardSquare[][] board, BoardSquare square, final int r,
-			final int c) {
+	private SquareEventHandler getDigPropagationRevealHandler(BoardSquare[][] board, BoardSquare square,
+			final int r, final int c) {
 		return new SquareEventHandler(){
 			@Override
 			public void handle(SquareEvent event) {
@@ -162,6 +162,7 @@ public class Board {
 		for(int i = -1; i <= 1; i++){
 			for(int j = -1; j <= 1; j++){
 				if(!(i == 0 && j == 0) && board[r + i][c + j].isBomb()){
+					//TODO This is super gross... can't this be refactored???
 					board[r + i][c + j].addListener(BoomEvent.class, ((RevealEvent)event).getSquare().getBoomHandler());
 				}
 			}
@@ -173,23 +174,31 @@ public class Board {
 		for(int i = -1; i <= 1; i++){
 			for(int j = -1; j <= 1; j++){
 				if(!(i == 0 && j == 0)){
-					board[r+i][c+j].removeListener(RevealEvent.class, square.getRevealHandler());
 					
-					BoardSquare before = board[r+i][c+j];
+					int row = r + i;
+					int col = c + j;
 					
-					board[r+i][c+j] = board[r+i][c+j].dig();
-					
-					BoardSquare after = board[r+i][c+j];
-					
-					//if digging the square change it, it was "revealed" and we
-					//need to add the boom listener so it will update any time 
-					//a bomb explodes
-					if(before != after){
-						revealedSquareBoomHandlers.add(
-								getRevealedBoomPropagationHandler(board, board[r+i][c+j], r+i, c+j));
-					}
+					doDig(square, board, row, col);
 				}
 			}
+		}
+	}
+
+	private void doDig(BoardSquare square, BoardSquare[][] board, int row, int col) {
+		board[row][col].removeListener(RevealEvent.class, square.getRevealHandler());
+		
+		BoardSquare before = board[row][col];
+		
+		board[row][col] = board[row][col].dig();
+		
+		BoardSquare after = board[row][col];
+		
+		//if digging the square change it, it was "revealed" and we
+		//need to add the boom listener so it will update any time 
+		//a bomb explodes
+		if(before != after){
+			revealedSquareBoomHandlers.add(
+					getRevealedBoomPropagationHandler(board, board[row][col], row, col));
 		}
 	}
 	
