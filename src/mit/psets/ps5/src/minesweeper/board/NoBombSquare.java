@@ -5,7 +5,7 @@ import java.util.List;
 import minesweeper.board.events.RevealEvent;
 import minesweeper.board.events.SquareEventHandler;
 
-public class NoBombSquare extends EventfulAbstractBoardSquare{
+public class NoBombSquare extends AbstractBoardSquare{
 
 	
 	@Override

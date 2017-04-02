@@ -4,7 +4,7 @@ import minesweeper.board.events.BoomEvent;
 import minesweeper.board.events.SquareEvent;
 import minesweeper.board.events.SquareEventHandler;
 
-public class RevealedSquare extends EventfulAbstractBoardSquare{
+public class RevealedSquare extends AbstractBoardSquare{
 
 	private int count = 0;
 	

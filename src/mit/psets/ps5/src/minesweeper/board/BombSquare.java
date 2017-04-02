@@ -6,7 +6,7 @@ import minesweeper.board.events.BoomEvent;
 import minesweeper.board.events.RevealEvent;
 import minesweeper.board.events.SquareEventHandler;
 
-public class BombSquare extends EventfulAbstractBoardSquare {
+public class BombSquare extends AbstractBoardSquare {
 
 	//after it explodes it's not a bomb anymore
 	private boolean isBomb = true;
