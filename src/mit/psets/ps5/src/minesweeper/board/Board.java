@@ -3,6 +3,9 @@
  */
 package minesweeper.board;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import minesweeper.board.events.BoomEvent;
 import minesweeper.board.events.RevealEvent;
 import minesweeper.board.events.SquareEvent;
@@ -68,6 +71,9 @@ public class Board {
 		squares[row][col] = squares[row][col].deflag();
 	}
 	
+	private final List<SquareEventHandler> revealedSquareBoomHandlers = new ArrayList<>();
+	
+	
 	private void addInitialEventListeners(BoardSquare[][] board) {
 		//for each square on the active game board, add the reveal event handlers
 		for(int row = 1; row < rows + 1; row++){
@@ -77,31 +83,36 @@ public class Board {
 				final int r = row;
 				final int c = col;
 				
-				square.addListener(RevealEvent.class, new SquareEventHandler(){
-					@Override
-					public void handle(SquareEvent event) {
-						if(event instanceof RevealEvent){	
-
-							//square will be replaced, so kill all the listeners
-							square.removeAllListeners();
-							
-							//only propagate if bomb count is zero
-							if(countNeighboringBombs(r, c, board) == 0){
-								digNeighbors(square, r, c, board);
-							}
-							
-							//add boom listeners to neighboring bombs
-							addBoomListenerToBombNeighbors(r, c, event, board);
-						}
-					}
-
-					
-				});
+				square.addListener(RevealEvent.class, getDigPropagationRevealHandler(board, square, r, c));
 				
 				//add default bomb counting handlers for all neighbors
 				addBombCountingHandlersToNeighbors(square, row, col, board);
 			}
 		}//end big square loop... gross!!!!	
+	}
+
+	private SquareEventHandler getDigPropagationRevealHandler(BoardSquare[][] board, BoardSquare square, final int r,
+			final int c) {
+		return new SquareEventHandler(){
+			@Override
+			public void handle(SquareEvent event) {
+				if(event instanceof RevealEvent){	
+
+					//square will be replaced, so kill all the listeners
+					square.removeAllListeners();
+					
+					//only propagate if bomb count is zero
+					if(countNeighboringBombs(r, c, board) == 0){
+						digNeighbors(square, r, c, board);
+					}
+					
+					//add boom listeners to neighboring bombs
+					addBoomListenerToBombNeighbors(r, c, event, board);
+				}
+			}
+
+			
+		};
 	}
 
 	private int countNeighboringBombs(final int r, final int c, BoardSquare[][] board) {
