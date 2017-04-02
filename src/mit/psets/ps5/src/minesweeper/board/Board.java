@@ -42,6 +42,18 @@ public class Board {
 		return rows;
 	}
 	
+	public synchronized void flag(int x, int y){
+		int row = y + 1;
+		int col = x + 1;
+		squares[row][col] = squares[row][col].flag();
+	}
+	
+	public synchronized void deflag(int x, int y){
+		int row = y + 1;
+		int col = x + 1;
+		squares[row][col] = squares[row][col].deflag();
+	}
+	
 	public synchronized boolean dig(int x, int y){
 		
 		int row = y + 1;
@@ -64,17 +76,7 @@ public class Board {
 		}
 	}
 	
-	public synchronized void flag(int x, int y){
-		int row = y + 1;
-		int col = x + 1;
-		squares[row][col] = squares[row][col].flag();
-	}
-	
-	public synchronized void deflag(int x, int y){
-		int row = y + 1;
-		int col = x + 1;
-		squares[row][col] = squares[row][col].deflag();
-	}
+
 	
 	private final List<SquareEventHandler> revealedSquareBoomHandlers = new ArrayList<>();
 	private SquareEventHandler getRevealedBoomPropagationHandler(BoardSquare[][] board, 
