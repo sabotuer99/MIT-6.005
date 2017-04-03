@@ -92,7 +92,29 @@ public class BoardTest {
     	sut.dig(0, 0);
     	String result = sut.toString();
     	
-    	assertEquals(String.format("2 - -%n- - -%n- - -%n"),result);
+    	assertEquals(String.format("2 - -%n"
+    			                 + "- - -%n"
+    			                 + "- - -%n"),result);
+    }
+    
+    @Test
+    public void Dig_XYOutOfBounds_Ignore(){
+    	int[][] small = {{1, 1, 0},
+    			         {1, 0, 0},
+    			         {0, 0, 0}};
+    	
+    	Board sut = new Board(small);
+    	//border
+    	sut.dig(-1, -1);
+    	sut.dig(3, 3);
+    	//waaaaay out of bounds
+    	sut.dig(-100, -1);
+    	sut.dig(3, 300);
+    	String result = sut.toString();
+    	
+    	assertEquals(String.format("- - -%n"
+    			                 + "- - -%n"
+    			                 + "- - -%n"),result);
     }
     
     @Test

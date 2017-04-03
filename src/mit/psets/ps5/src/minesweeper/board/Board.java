@@ -56,6 +56,10 @@ public class Board {
 	
 	public synchronized boolean dig(int x, int y){
 		
+		if(x < 0 || y < 0 || x >= cols || y >= rows){
+			return true;
+		}
+		
 		int row = y + 1;
 		int col = x + 1;
 		
