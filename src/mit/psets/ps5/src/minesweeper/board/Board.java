@@ -230,7 +230,7 @@ public class Board {
 		String header3 = "      ";
 		String underline = "     ";
 		
-		for(int col = 1; col < cols + 1; col++){
+		for(int col = 0; col < cols; col++){
 			int huns = col / 100;
 			int tens = (col - (huns*100))/10;
 			int ones = col % 10;
@@ -250,7 +250,7 @@ public class Board {
 		for(int row = 1; row < rows + 1; row++){
 			for(int col = 0; col < cols + 1; col++){
 				if(col == 0){
-					sb.append(String.format("% 4d", row)).append("| ");
+					sb.append(String.format("% 4d", row-1)).append("| ");
 				} else {
 					sb.append(squares[row][col].isBomb() ? 1 : 0).append(" ");
 				}
