@@ -43,12 +43,22 @@ public class Board {
 	}
 	
 	public synchronized void flag(int x, int y){
+		
+		if(x < 0 || y < 0 || x >= cols || y >= rows){
+			return;
+		}
+		
 		int row = y + 1;
 		int col = x + 1;
 		squares[row][col] = squares[row][col].flag();
 	}
 	
 	public synchronized void deflag(int x, int y){
+		
+		if(x < 0 || y < 0 || x >= cols || y >= rows){
+			return;
+		}
+		
 		int row = y + 1;
 		int col = x + 1;
 		squares[row][col] = squares[row][col].deflag();
