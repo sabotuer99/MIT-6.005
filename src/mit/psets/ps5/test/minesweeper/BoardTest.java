@@ -457,6 +457,37 @@ public class BoardTest {
     }
     
     @Test
+    public void toString_PropagationTestBoardWithNoBombDig_SameResult(){
+    	int[][] small = {{0,0,0,0,0,0,0,0,0,0},
+    			         {0,0,0,1,0,0,1,0,0,0},
+    			         {0,0,0,0,0,0,0,0,0,0},
+    			         {0,0,0,0,0,0,0,0,0,0},
+    			         {0,1,0,0,0,0,1,0,0,0},
+    			         {0,1,0,0,0,0,0,0,0,0},
+    			         {0,1,0,0,0,0,0,1,0,0},
+    			         {0,0,0,0,0,0,0,0,0,0},
+    			         {0,0,0,0,0,0,0,0,0,0},
+    			         {1,0,0,0,0,1,0,0,0,0}};
+    	
+    	Board sut = new Board(small);
+    	sut.dig(3,3);
+    	System.out.println("dig 3 3\n" + sut.toString());
+    	//sut.dig(5,4);
+    	String result = sut.toString();   	
+    	String expected = String.format( "- - - - - - - - - -%n"
+								    	+"- - - - - - - - - -%n"
+								    	+"- - 1 1 1 1 - - - -%n"
+								    	+"- - 1     1 - - - -%n"
+								    	+"- - 2     1 - - - -%n"
+								    	+"- - 3     1 2 - - -%n"
+								    	+"- - 2       1 - - -%n"
+								    	+"- 1 1       1 - - -%n"
+								    	+"- 1     1 1 1 - - -%n"
+								    	+"- 1     1 - - - - -%n");
+    	assertEquals(expected,result);
+    }
+    
+    @Test
     public void toDebugString_hugeMap_doesntLookLikeShit(){
     	int[][] random = new int[100][70];
     	for(int row = 0; row < 100; row++){
