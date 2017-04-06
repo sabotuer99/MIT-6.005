@@ -469,4 +469,15 @@ public class BoardTest {
     	
     	System.out.println(sut.toDebugString());
     }
+    
+    @Test
+    public void randomBoard_returnsRandomBoards(){
+    	for(int i = 0; i < 5; i++){
+    		Board sut = Board.randomBoard(15, 10, 0.25);
+    		System.out.println(sut.toDebugString("X","_"));
+    	}
+    	assertTrue(true);
+    }
+    
+    
 }

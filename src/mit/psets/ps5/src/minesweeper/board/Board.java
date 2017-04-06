@@ -234,8 +234,11 @@ public class Board {
 		return sb.toString();
 	}
 	
-	
 	public synchronized String toDebugString() {
+		return toDebugString("1", "0");
+	}
+	
+	public synchronized String toDebugString(String bomb, String empty) {
 		
 		StringBuilder sb = new StringBuilder();
 		
@@ -266,7 +269,7 @@ public class Board {
 				if(col == 0){
 					sb.append(String.format("% 4d", row-1)).append("| ");
 				} else {
-					sb.append(squares[row][col].isBomb() ? 1 : 0).append(" ");
+					sb.append(squares[row][col].isBomb() ? bomb : empty).append(" ");
 				}
 			}
 			sb.setLength(sb.length() - 1); //trim trailing space
@@ -309,5 +312,23 @@ public class Board {
 		return board;
 	}
 
-	
+
+	public static Board randomBoard(int cols, int rows, double ratio) {
+		
+		if(cols <= 0 || rows <= 0){
+			return randomBoard(10,10, ratio);
+		}
+		
+		int[][] vals = new int[rows][cols];
+		for(int row = 0; row < rows; row++){
+			for(int col = 0; col < cols; col++){
+				double roll = Math.random();
+				if(roll < ratio){
+					vals[row][col] = 1;
+				}
+			}
+		}
+		
+		return new Board(vals);
+	}
 }
