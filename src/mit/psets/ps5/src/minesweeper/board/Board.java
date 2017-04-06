@@ -241,7 +241,7 @@ public class Board {
 	public synchronized String toDebugString(String bomb, String empty) {
 		
 		StringBuilder sb = new StringBuilder();
-		
+		sb.append(String.format("%nBoard:  X: %s   Y: %s   Bombs: %s %n", getX(), getY(), countBombs()));
 		String header1 = "      ";
 		String header2 = "      ";
 		String header3 = "      ";
@@ -279,6 +279,16 @@ public class Board {
 		return sb.toString();
 	}
 	
+	private int countBombs() {
+		int count = 0;
+		for(int row = 1; row <= rows; row++){
+			for(int col = 1; col <= cols; col++){
+				count += squares[row][col].isBomb() ? 1 : 0;
+			}
+		}
+		return count;
+	}
+
 	private void addBombCountingHandlersToNeighbors(BoardSquare square, final int r, final int c, BoardSquare[][] board) {
 		for(int i = -1; i <= 1; i++){
 			for(int j = -1; j <= 1; j++){
@@ -327,6 +337,56 @@ public class Board {
 					vals[row][col] = 1;
 				}
 			}
+		}
+		
+		return new Board(vals);
+	}
+	
+	public static Board randomFYBoard(int cols, int rows, double ratio) {
+		
+		if(cols <= 0 || rows <= 0){
+			return randomFYBoard(10,10, ratio);
+		}
+		
+		int bombs = (int) (rows * cols * ratio);
+		return randomFYBoard(cols, rows, bombs);
+		
+	}
+	
+	
+	public static Board randomFYBoard(int cols, int rows, int bombs) {
+		
+		if(cols <= 0 || rows <= 0){
+			return randomFYBoard(10,10,10);
+		}
+		
+		
+		int[][] vals = new int[rows][cols];
+		int[][] coordinates = new int[rows * cols][2];
+		
+		//initialize coordinates
+		int index = 0;
+		for(int row = 0; row < rows; row++){
+			for(int col = 0; col < cols; col++){
+				coordinates[index][0] = row;
+				coordinates[index][1] = col;
+				index++;
+			}
+		}
+		
+		//shuffle
+		for(int i = coordinates.length - 1; i >= 1; i--){
+			int j = (int) (Math.random() * (i + 1.0));
+			int[] temp = coordinates[j];
+			coordinates[j] = coordinates[i];
+			coordinates[i] = temp;
+		}
+		
+		//bomb it up!
+		for(int i = 0; i < bombs; i++){
+			int row = coordinates[i][0];
+			int col = coordinates[i][1];
+			vals[row][col] = 1;
 		}
 		
 		return new Board(vals);

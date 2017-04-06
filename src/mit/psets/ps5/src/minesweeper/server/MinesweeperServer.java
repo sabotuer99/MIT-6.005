@@ -326,7 +326,7 @@ public class MinesweeperServer {
 			throws IOException {
 
 		// TODO: Continue implementation here in problem 4
-		Board board = Board.randomBoard(sizeX, sizeY, 0.2);
+		Board board = Board.randomFYBoard(sizeX, sizeY, 0.2);
 		if(file.isPresent()){
 			board = parseFile(file.get());
 		}
@@ -346,7 +346,7 @@ public class MinesweeperServer {
 	}
 	
 	private static Board parseFile(File file){
-		Board board = Board.randomBoard(1,1,.2);
+		Board board = Board.randomFYBoard(1,1,.2);
 		try {
 			Scanner sc = new Scanner(Files.newBufferedReader(file.toPath()));
 

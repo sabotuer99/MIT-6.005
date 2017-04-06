@@ -479,5 +479,13 @@ public class BoardTest {
     	assertTrue(true);
     }
     
+    @Test
+    public void randomFYBoard_returnsEvenlyDistributedRandomBoards(){
+    	for(int i = 0; i < 5; i++){
+    		Board sut = Board.randomFYBoard(15, 10, .25);
+    		System.out.println(sut.toDebugString("X","_"));
+    	}
+    	assertTrue(true);
+    }
     
 }
