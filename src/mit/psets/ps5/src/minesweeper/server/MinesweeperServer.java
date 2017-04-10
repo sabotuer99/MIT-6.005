@@ -150,7 +150,8 @@ public class MinesweeperServer {
 			boolean keepPlaying = true;
 
 			// connection loop
-			for (String line = in.readLine(); keepPlaying; line = in.readLine()) {
+			String line = in.readLine(); 
+			while (keepPlaying) {
 
 				// stupid readLine() cuts off the terminators which breaks
 				// the parser... fucking hell
@@ -171,10 +172,16 @@ public class MinesweeperServer {
 
 				CommandResult result = command.exectute(board);
 
+				
 				if (!debug || !result.getResponse().contains("BOOM!")) {
 					keepPlaying = result.keepPlaying();
 				}
+				
 				out.println(result.getResponse().replaceAll("[\\r\\n]*$", ""));
+				
+				if(keepPlaying){
+					line = in.readLine();
+				}
 
 			}
 		} finally {
@@ -346,7 +353,7 @@ public class MinesweeperServer {
 			return randomBoard(10,10);
 		}
 		
-		int[][] vals = new int[cols][rows];
+		int[][] vals = new int[rows][cols];
 		for(int row = 0; row < rows; row++){
 			for(int col = 0; col < cols; col++){
 				double roll = Math.random();
