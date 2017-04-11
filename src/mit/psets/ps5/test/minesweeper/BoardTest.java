@@ -28,7 +28,7 @@ public class BoardTest {
     			         {0, 0, 0},
     			         {0, 0, 1}};
     	
-    	Board sut = new Board(small);
+    	new Board(small);
     }
     
     @Test
